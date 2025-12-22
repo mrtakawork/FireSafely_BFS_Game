@@ -1,0 +1,171 @@
+import React from 'react'
+import './GameBoard.css'
+
+const GameBoard = ({
+  gridSize,
+  startPoints,
+  farthestPoints,
+  guessedPoints,
+  gameStatus,
+  onCellClick,
+  allCellDistances,
+  obstacles
+}) => {
+  // 檢查是否為障礙物
+  const isObstacle = (x, y) => {
+    return obstacles && obstacles.some(obs => obs.x === x && obs.y === y)
+  }
+
+  // 檢查是否為起點
+  const isStartPoint = (x, y) => {
+    return startPoints && startPoints.some(sp => sp.x === x && sp.y === y)
+  }
+
+  // 檢查是否為最遠點
+  const isFarthestPoint = (x, y) => {
+    return farthestPoints && farthestPoints.some(fp => fp.x === x && fp.y === y)
+  }
+
+  // 計算最大距離用於顏色正規化
+  const getMaxDistance = () => {
+    const validDistances = Object.values(allCellDistances)
+      .filter(dist => dist !== Infinity && dist !== undefined)
+    return validDistances.length > 0 ? Math.max(...validDistances) : 0
+  }
+
+  // 根據距離獲取單一色系漸變顏色（從淺藍到深藍）
+  const getColorByDistance = (distance, maxDistance) => {
+    if (distance === Infinity || distance === undefined || maxDistance === 0) {
+      return null
+    }
+    
+    // 正規化距離到 0-1 範圍
+    const normalized = distance / maxDistance
+    
+    // 使用單一藍色系漸變
+    // 色相固定為藍色 (210°)，只改變亮度和飽和度
+    // 從淺藍（高亮度，高飽和度）到深藍（低亮度，高飽和度）
+    
+    const hue = 210 // 固定藍色色相
+    const saturation = 85 + normalized * 15 // 飽和度從 85% 到 100%
+    const lightness = 85 - normalized * 50 // 亮度從 85% 到 35%（從淺到深）
+    
+    return `hsl(${hue}, ${Math.round(saturation)}%, ${Math.round(lightness)}%)`
+  }
+
+  // 根據背景顏色確定文字顏色（HSL 格式）
+  const getTextColor = (hslColor) => {
+    if (!hslColor || !hslColor.startsWith('hsl')) return '#333'
+    const match = hslColor.match(/\d+/g)
+    if (match && match.length >= 3) {
+      const lightness = parseInt(match[2])
+      return lightness < 50 ? '#fff' : '#333'
+    }
+    return '#333'
+  }
+
+  const getCellClass = (x, y, guessedPoint) => {
+    let classes = 'cell'
+    
+    if (isObstacle(x, y)) return classes + ' obstacle'
+    if (isStartPoint(x, y)) return classes + ' start-point'
+    if (gameStatus !== 'playing' && isFarthestPoint(x, y)) return classes + ' farthest-point'
+    
+    if (guessedPoint) {
+      classes += ' guessed'
+      return guessedPoint.isCorrect ? classes + ' correct' : classes + ' incorrect'
+    }
+    
+    const distance = allCellDistances[`${x}-${y}`]
+    if ((gameStatus === 'won' || gameStatus === 'lost') && distance !== undefined && distance !== Infinity) {
+      classes += ' show-distance'
+    }
+    
+    return classes
+  }
+
+  const getCellContent = (x, y, guessedPoint, distance) => {
+    if (isObstacle(x, y)) return ''
+    if (isStartPoint(x, y)) return 'door'
+    
+    if (guessedPoint && gameStatus === 'playing') {
+      return guessedPoint.distance === Infinity ? '∞' : guessedPoint.distance.toFixed(1)
+    }
+    
+    if ((gameStatus === 'won' || gameStatus === 'lost') && distance !== undefined && distance !== Infinity) {
+      return distance.toFixed(1)
+    }
+    
+    return ''
+  }
+
+  const getCellTitle = (x, y, distance, guessedPoint) => {
+    if (isObstacle(x, y)) return '障礙物（牆壁）'
+    if (isStartPoint(x, y)) return 'door'
+    
+    if (guessedPoint) {
+      return guessedPoint.distance === Infinity 
+        ? '無法到達' 
+        : `距離: ${guessedPoint.distance.toFixed(2)}`
+    }
+    
+    if ((gameStatus === 'won' || gameStatus === 'lost') && distance !== undefined) {
+      return distance === Infinity 
+        ? '無法到達（障礙物阻擋）' 
+        : `距離: ${distance.toFixed(2)}`
+    }
+    
+    return '點擊猜測'
+  }
+
+  return (
+    <div className="game-board-container">
+      <div 
+        className="game-board"
+        style={{
+          gridTemplateColumns: `repeat(${gridSize}, 1fr)`,
+          gridTemplateRows: `repeat(${gridSize}, 1fr)`
+        }}
+      >
+        {Array.from({ length: gridSize * gridSize }).map((_, index) => {
+          const x = index % gridSize
+          const y = Math.floor(index / gridSize)
+          const distance = allCellDistances[`${x}-${y}`]
+          const guessedPoint = guessedPoints.find(p => p.x === x && p.y === y)
+          
+          // 計算漸變顏色（僅在遊戲結束時且不是特殊格子）
+          const isGameEnded = gameStatus === 'won' || gameStatus === 'lost'
+          const shouldApplyDistanceColor = 
+            isGameEnded &&
+            !isObstacle(x, y) && 
+            !isStartPoint(x, y) && 
+            !isFarthestPoint(x, y) &&
+            !guessedPoint &&
+            distance !== Infinity &&
+            distance !== undefined
+          
+          const maxDistance = shouldApplyDistanceColor ? getMaxDistance() : 0
+          const backgroundColor = shouldApplyDistanceColor 
+            ? getColorByDistance(distance, maxDistance) 
+            : null
+          const textColor = backgroundColor ? getTextColor(backgroundColor) : null
+          
+          return (
+            <div
+              key={`${x}-${y}`}
+              className={getCellClass(x, y, guessedPoint)}
+              style={backgroundColor ? { backgroundColor, color: textColor } : {}}
+              onClick={() => onCellClick(x, y)}
+              title={getCellTitle(x, y, distance, guessedPoint)}
+            >
+              {getCellContent(x, y, guessedPoint, distance)}
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+export default GameBoard
+

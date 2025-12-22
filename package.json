@@ -1,0 +1,24 @@
+{
+  "name": "fs-game",
+  "version": "1.0.0",
+  "description": "猜測網格空間中最遠點的遊戲",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "install:proxy": "npm install --proxy=http://proxyprod.bd.net:8080 --https-proxy=http://proxyprod.bd.net:8080"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.16.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "vite": "^4.4.0"
+  }
+}
+

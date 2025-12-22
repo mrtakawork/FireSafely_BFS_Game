@@ -1,0 +1,132 @@
+.game-board-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+  overflow-x: auto;
+  position: relative;
+  z-index: 0;
+}
+
+.game-board {
+  display: grid;
+  gap: 1px;
+  background: #e0e0e0;
+  padding: 2px;
+  border-radius: 8px;
+  min-width: 400px;
+  aspect-ratio: 1;
+}
+
+.cell {
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cell:hover {
+  background: #e8e8e8;
+  transform: scale(1.05);
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.cell.start-point {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-weight: 700;
+  cursor: default;
+}
+
+.cell.start-point:hover {
+  transform: none;
+}
+
+.cell.obstacle {
+  background: #000000;
+  cursor: not-allowed;
+}
+
+.cell.obstacle:hover {
+  transform: none;
+  background: #000000;
+}
+
+.cell.farthest-point {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  font-weight: 700;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.cell.guessed {
+  cursor: default;
+}
+
+.cell.guessed.correct {
+  background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+  color: white;
+  font-weight: 700;
+}
+
+.cell.guessed.incorrect {
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  color: #333;
+}
+
+.cell.guessed:hover {
+  transform: none;
+}
+
+/* 遊戲結束時顯示所有距離的樣式 */
+.cell.show-distance {
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: default;
+}
+
+.cell.show-distance:hover {
+  transform: scale(1.02);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 768px) {
+  .game-board {
+    min-width: 300px;
+  }
+  
+  .cell {
+    font-size: 0.6rem;
+    min-height: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-board {
+    min-width: 250px;
+  }
+  
+  .cell {
+    font-size: 0.5rem;
+    min-height: 20px;
+  }
+}
+
