@@ -43,6 +43,12 @@ jobs:
           VITE_BASE_URL: '/${{ steps.repo.outputs.name }}/'
         run: npm run build
 
+      - name: Create 404.html for GitHub Pages
+        run: |
+          # 複製 index.html 為 404.html，這樣 GitHub Pages 會將所有 404 請求重定向到 React 應用
+          cp dist/index.html dist/404.html
+          echo "Created 404.html for GitHub Pages routing"
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
