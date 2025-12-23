@@ -69,7 +69,7 @@ const GameBoard = ({
     
     if (isObstacle(x, y)) return classes + ' obstacle'
     if (isStartPoint(x, y)) return classes + ' start-point'
-    if (gameStatus !== 'playing' && isFarthestPoint(x, y)) return classes + ' farthest-point'
+    if (gameStatus !== 'playing' && gameStatus !== 'waiting' && isFarthestPoint(x, y)) return classes + ' farthest-point'
     
     if (guessedPoint) {
       classes += ' guessed'
