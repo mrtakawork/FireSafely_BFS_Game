@@ -16,6 +16,12 @@ const GameBoard = ({
     return obstacles && obstacles.some(obs => obs.x === x && obs.y === y)
   }
 
+  // 獲取障礙物類型
+  const getObstacleType = (x, y) => {
+    const obstacle = obstacles && obstacles.find(obs => obs.x === x && obs.y === y)
+    return obstacle?.type || 'wall' // 默認為 wall 類型（向後兼容）
+  }
+
   // 檢查是否為起點
   const isStartPoint = (x, y) => {
     return startPoints && startPoints.some(sp => sp.x === x && sp.y === y)
@@ -67,7 +73,10 @@ const GameBoard = ({
   const getCellClass = (x, y, guessedPoint) => {
     let classes = 'cell'
     
-    if (isObstacle(x, y)) return classes + ' obstacle'
+    if (isObstacle(x, y)) {
+      const obstacleType = getObstacleType(x, y)
+      return classes + ` obstacle obstacle-${obstacleType}`
+    }
     if (isStartPoint(x, y)) return classes + ' start-point'
     if (gameStatus !== 'playing' && gameStatus !== 'waiting' && isFarthestPoint(x, y)) return classes + ' farthest-point'
     
@@ -86,7 +95,7 @@ const GameBoard = ({
 
   const getCellContent = (x, y, guessedPoint, distance) => {
     if (isObstacle(x, y)) return ''
-    if (isStartPoint(x, y)) return 'door'
+    if (isStartPoint(x, y)) return 'Exit'
     
     if (guessedPoint && gameStatus === 'playing') {
       return guessedPoint.distance === Infinity ? '∞' : guessedPoint.distance.toFixed(1)
@@ -100,8 +109,16 @@ const GameBoard = ({
   }
 
   const getCellTitle = (x, y, distance, guessedPoint) => {
-    if (isObstacle(x, y)) return '障礙物（牆壁）'
-    if (isStartPoint(x, y)) return 'door'
+    if (isObstacle(x, y)) {
+      const obstacleType = getObstacleType(x, y)
+      const typeNames = {
+        'wall': '障礙物（牆壁）',
+        'air': '障礙物（空氣塊）',
+        'pathway': '障礙物（通道塊）'
+      }
+      return typeNames[obstacleType] || '障礙物'
+    }
+    if (isStartPoint(x, y)) return 'Exit'
     
     if (guessedPoint) {
       return guessedPoint.distance === Infinity 

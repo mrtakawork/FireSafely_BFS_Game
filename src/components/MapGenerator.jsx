@@ -52,9 +52,9 @@ const calculateShortestPath = (start, end, obstaclesList, gridSize) => {
 }
 
 // 生成多個起點
-const generateStartPoints = (gridSize, doorCount = null) => {
-  const count = doorCount !== null
-    ? Math.max(1, Math.min(doorCount, Math.floor(gridSize * gridSize * 0.1)))
+const generateStartPoints = (gridSize, exitCount = null) => {
+  const count = exitCount !== null
+    ? Math.max(1, Math.min(exitCount, Math.floor(gridSize * gridSize * 0.1)))
     : Math.max(2, Math.min(4, Math.floor(gridSize / 3)))
   const points = []
   const used = new Set()
@@ -73,6 +73,9 @@ const generateStartPoints = (gridSize, doorCount = null) => {
   return points
 }
 
+// 障礙物類型列表
+const OBSTACLE_TYPES = ['wall', 'air', 'pathway']
+
 // 生成障礙物
 const generateObstacles = (startPoints, gridSize, obstaclePercentage = 15) => {
   const count = Math.floor(gridSize * gridSize * (obstaclePercentage / 100))
@@ -86,7 +89,9 @@ const generateObstacles = (startPoints, gridSize, obstaclePercentage = 15) => {
     
     if (!used.has(key)) {
       used.add(key)
-      obstacles.push({ x, y })
+      // 隨機選擇障礙物類型
+      const type = OBSTACLE_TYPES[Math.floor(Math.random() * OBSTACLE_TYPES.length)]
+      obstacles.push({ x, y, type })
     }
   }
   
@@ -101,11 +106,19 @@ const calculateDistanceToNearestStart = (point, startPoints, obstacles, gridSize
 }
 
 // 生成完整的地圖數據
-export const generateMap = (gridSize, gameMode = 'random', presetLevel = null, doorCount = null, obstaclePercentage = 15) => {
+export const generateMap = (gridSize, gameMode = 'random', presetLevel = null, exitCount = null, obstaclePercentage = 15) => {
   const isPreset = gameMode === 'preset' && presetLevel
   const finalGridSize = isPreset ? presetLevel.gridSize : gridSize
-  const startPoints = isPreset ? [...presetLevel.startPoints] : generateStartPoints(finalGridSize, doorCount)
-  const obstacles = isPreset ? [...presetLevel.obstacles] : generateObstacles(startPoints, finalGridSize, obstaclePercentage)
+  const startPoints = isPreset ? [...presetLevel.startPoints] : generateStartPoints(finalGridSize, exitCount)
+  let obstacles = isPreset ? [...presetLevel.obstacles] : generateObstacles(startPoints, finalGridSize, obstaclePercentage)
+  
+  // 為預設關卡中沒有類型的障礙物添加隨機類型（向後兼容）
+  obstacles = obstacles.map(obs => {
+    if (!obs.type) {
+      obs.type = OBSTACLE_TYPES[Math.floor(Math.random() * OBSTACLE_TYPES.length)]
+    }
+    return obs
+  })
 
   // 計算所有點到最近起點的最短路徑距離，找出所有最遠的點
   let maxDistance = 0

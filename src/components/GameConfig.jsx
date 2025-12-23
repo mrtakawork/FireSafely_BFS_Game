@@ -3,7 +3,7 @@ import './GameConfig.css'
 
 const GameConfig = ({
   gridSize,
-  doorCount,
+  exitCount,
   obstaclePercentage,
   maxAttempts,
   onConfigChange,
@@ -11,14 +11,14 @@ const GameConfig = ({
   gameStatus
 }) => {
   const [localGridSize, setLocalGridSize] = useState(gridSize)
-  const [localDoorCount, setLocalDoorCount] = useState(doorCount)
+  const [localExitCount, setLocalExitCount] = useState(exitCount)
   const [localObstaclePercentage, setLocalObstaclePercentage] = useState(obstaclePercentage)
   const [localMaxAttempts, setLocalMaxAttempts] = useState(maxAttempts)
 
   const handleApply = () => {
     onConfigChange({
       gridSize: localGridSize,
-      doorCount: localDoorCount,
+      exitCount: localExitCount,
       obstaclePercentage: localObstaclePercentage,
       maxAttempts: localMaxAttempts
     })
@@ -26,12 +26,12 @@ const GameConfig = ({
 
   const handleReset = () => {
     setLocalGridSize(10)
-    setLocalDoorCount(null)
+    setLocalExitCount(null)
     setLocalObstaclePercentage(15)
     setLocalMaxAttempts(5)
     onConfigChange({
       gridSize: 10,
-      doorCount: null,
+      exitCount: null,
       obstaclePercentage: 15,
       maxAttempts: 5
     })
@@ -74,19 +74,19 @@ const GameConfig = ({
       </div>
 
       <div className="config-group">
-        <label htmlFor="config-door-count">
-          Door 數量：
+        <label htmlFor="config-exit-count">
+          Exit 數量：
           <span className="config-value">
-            {localDoorCount === null ? '自動' : localDoorCount}
+            {localExitCount === null ? '自動' : localExitCount}
           </span>
         </label>
         <div className="config-radio-group">
           <label>
             <input
               type="radio"
-              name="door-count"
-              checked={localDoorCount === null}
-              onChange={() => setLocalDoorCount(null)}
+              name="exit-count"
+              checked={localExitCount === null}
+              onChange={() => setLocalExitCount(null)}
               disabled={isDisabled}
             />
             自動 (2-4個)
@@ -95,9 +95,9 @@ const GameConfig = ({
             <label key={count}>
               <input
                 type="radio"
-                name="door-count"
-                checked={localDoorCount === count}
-                onChange={() => setLocalDoorCount(count)}
+                name="exit-count"
+                checked={localExitCount === count}
+                onChange={() => setLocalExitCount(count)}
                 disabled={isDisabled}
               />
               {count} 個

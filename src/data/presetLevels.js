@@ -9,9 +9,9 @@ export const presetLevels = [
       { x: 6, y: 6 }
     ],
     obstacles: [
-      { x: 2, y: 2 }, { x: 3, y: 2 }, { x: 4, y: 2 },
-      { x: 2, y: 5 }, { x: 3, y: 5 }, { x: 4, y: 5 },
-      { x: 5, y: 3 }, { x: 5, y: 4 }
+      { x: 2, y: 2, type: 'wall' }, { x: 3, y: 2, type: 'wall' }, { x: 4, y: 2, type: 'pathway' },
+      { x: 2, y: 5, type: 'air' }, { x: 3, y: 5, type: 'wall' }, { x: 4, y: 5, type: 'pathway' },
+      { x: 5, y: 3, type: 'air' }, { x: 5, y: 4, type: 'wall' }
     ]
   },
   {
@@ -23,10 +23,10 @@ export const presetLevels = [
       { x: 9, y: 9 }
     ],
     obstacles: [
-      { x: 1, y: 1 }, { x: 2, y: 1 }, { x: 3, y: 1 },
-      { x: 6, y: 6 }, { x: 7, y: 6 }, { x: 8, y: 6 },
-      { x: 4, y: 4 }, { x: 4, y: 5 }, { x: 5, y: 4 },
-      { x: 2, y: 7 }, { x: 3, y: 7 }, { x: 7, y: 2 }
+      { x: 1, y: 1, type: 'wall' }, { x: 2, y: 1, type: 'pathway' }, { x: 3, y: 1, type: 'wall' },
+      { x: 6, y: 6, type: 'air' }, { x: 7, y: 6, type: 'wall' }, { x: 8, y: 6, type: 'pathway' },
+      { x: 4, y: 4, type: 'wall' }, { x: 4, y: 5, type: 'air' }, { x: 5, y: 4, type: 'pathway' },
+      { x: 2, y: 7, type: 'wall' }, { x: 3, y: 7, type: 'air' }, { x: 7, y: 2, type: 'pathway' }
     ]
   },
   {
@@ -39,13 +39,13 @@ export const presetLevels = [
       { x: 2, y: 9 }
     ],
     obstacles: [
-      { x: 4, y: 4 }, { x: 5, y: 4 }, { x: 6, y: 4 },
-      { x: 4, y: 5 }, { x: 6, y: 5 },
-      { x: 4, y: 6 }, { x: 5, y: 6 }, { x: 6, y: 6 },
-      { x: 1, y: 5 }, { x: 1, y: 6 },
-      { x: 10, y: 5 }, { x: 10, y: 6 },
-      { x: 5, y: 1 }, { x: 6, y: 1 },
-      { x: 5, y: 10 }, { x: 6, y: 10 }
+      { x: 4, y: 4, type: 'wall' }, { x: 5, y: 4, type: 'wall' }, { x: 6, y: 4, type: 'pathway' },
+      { x: 4, y: 5, type: 'air' }, { x: 6, y: 5, type: 'air' },
+      { x: 4, y: 6, type: 'wall' }, { x: 5, y: 6, type: 'pathway' }, { x: 6, y: 6, type: 'wall' },
+      { x: 1, y: 5, type: 'wall' }, { x: 1, y: 6, type: 'air' },
+      { x: 10, y: 5, type: 'pathway' }, { x: 10, y: 6, type: 'wall' },
+      { x: 5, y: 1, type: 'air' }, { x: 6, y: 1, type: 'wall' },
+      { x: 5, y: 10, type: 'pathway' }, { x: 6, y: 10, type: 'air' }
     ]
   },
   {
@@ -58,13 +58,13 @@ export const presetLevels = [
       { x: 1, y: 13 }
     ],
     obstacles: [
-      { x: 3, y: 3 }, { x: 4, y: 3 }, { x: 5, y: 3 },
-      { x: 9, y: 9 }, { x: 10, y: 9 }, { x: 11, y: 9 },
-      { x: 3, y: 11 }, { x: 4, y: 11 }, { x: 5, y: 11 },
-      { x: 7, y: 2 }, { x: 7, y: 3 }, { x: 7, y: 4 },
-      { x: 7, y: 11 }, { x: 7, y: 12 }, { x: 7, y: 13 },
-      { x: 2, y: 7 }, { x: 3, y: 7 }, { x: 4, y: 7 },
-      { x: 11, y: 7 }, { x: 12, y: 7 }, { x: 13, y: 7 }
+      { x: 3, y: 3, type: 'wall' }, { x: 4, y: 3, type: 'pathway' }, { x: 5, y: 3, type: 'wall' },
+      { x: 9, y: 9, type: 'air' }, { x: 10, y: 9, type: 'wall' }, { x: 11, y: 9, type: 'pathway' },
+      { x: 3, y: 11, type: 'wall' }, { x: 4, y: 11, type: 'air' }, { x: 5, y: 11, type: 'wall' },
+      { x: 7, y: 2, type: 'pathway' }, { x: 7, y: 3, type: 'wall' }, { x: 7, y: 4, type: 'air' },
+      { x: 7, y: 11, type: 'wall' }, { x: 7, y: 12, type: 'pathway' }, { x: 7, y: 13, type: 'wall' },
+      { x: 2, y: 7, type: 'air' }, { x: 3, y: 7, type: 'wall' }, { x: 4, y: 7, type: 'pathway' },
+      { x: 11, y: 7, type: 'wall' }, { x: 12, y: 7, type: 'air' }, { x: 13, y: 7, type: 'pathway' }
     ]
   },
   {
@@ -78,22 +78,22 @@ export const presetLevels = [
       { x: 14, y: 0 }
     ],
     obstacles: [
-      { x: 2, y: 2 }, { x: 3, y: 2 }, { x: 4, y: 2 },{ x: 5, y: 2 },
-      { x: 2, y: 3 }, { x: 4, y: 3 },
-      { x: 2, y: 4 }, { x: 3, y: 4 }, { x: 4, y: 4 },
-      { x: 10, y: 10 }, { x: 11, y: 10 }, { x: 12, y: 10 },
-      { x: 10, y: 11 }, { x: 12, y: 11 },
-      { x: 10, y: 12 }, { x: 11, y: 12 }, { x: 12, y: 12 },
-      { x: 2, y: 10 }, { x: 3, y: 10 }, { x: 4, y: 10 },
-      { x: 2, y: 11 }, { x: 4, y: 11 },
-      { x: 2, y: 12 }, { x: 3, y: 12 }, { x: 4, y: 12 },
-      { x: 10, y: 2 }, { x: 11, y: 2 }, { x: 12, y: 2 },
-      { x: 10, y: 3 }, { x: 12, y: 3 },
-      { x: 10, y: 4 }, { x: 11, y: 4 }, { x: 12, y: 4 },
-      { x: 7, y: 1 }, { x: 7, y: 2 }, { x: 7, y: 3 },
-      { x: 7, y: 12 }, { x: 7, y: 13 }, { x: 7, y: 14 },
-      { x: 1, y: 7 }, { x: 2, y: 7 }, { x: 3, y: 7 },
-      { x: 12, y: 7 }, { x: 13, y: 7 }, { x: 14, y: 7 }
+      { x: 2, y: 2, type: 'wall' }, { x: 3, y: 2, type: 'wall' }, { x: 4, y: 2, type: 'pathway' },
+      { x: 2, y: 3, type: 'air' }, { x: 4, y: 3, type: 'wall' },
+      { x: 2, y: 4, type: 'wall' }, { x: 3, y: 4, type: 'pathway' }, { x: 4, y: 4, type: 'air' },
+      { x: 10, y: 10, type: 'wall' }, { x: 11, y: 10, type: 'wall' }, { x: 12, y: 10, type: 'pathway' },
+      { x: 10, y: 11, type: 'air' }, { x: 12, y: 11, type: 'wall' },
+      { x: 10, y: 12, type: 'wall' }, { x: 11, y: 12, type: 'pathway' }, { x: 12, y: 12, type: 'air' },
+      { x: 2, y: 10, type: 'wall' }, { x: 3, y: 10, type: 'pathway' }, { x: 4, y: 10, type: 'wall' },
+      { x: 2, y: 11, type: 'air' }, { x: 4, y: 11, type: 'wall' },
+      { x: 2, y: 12, type: 'wall' }, { x: 3, y: 12, type: 'air' }, { x: 4, y: 12, type: 'pathway' },
+      { x: 10, y: 2, type: 'wall' }, { x: 11, y: 2, type: 'pathway' }, { x: 12, y: 2, type: 'wall' },
+      { x: 10, y: 3, type: 'air' }, { x: 12, y: 3, type: 'wall' },
+      { x: 10, y: 4, type: 'wall' }, { x: 11, y: 4, type: 'air' }, { x: 12, y: 4, type: 'pathway' },
+      { x: 7, y: 1, type: 'pathway' }, { x: 7, y: 2, type: 'wall' }, { x: 7, y: 3, type: 'air' },
+      { x: 7, y: 12, type: 'wall' }, { x: 7, y: 13, type: 'pathway' }, { x: 7, y: 14, type: 'wall' },
+      { x: 1, y: 7, type: 'air' }, { x: 2, y: 7, type: 'wall' }, { x: 3, y: 7, type: 'pathway' },
+      { x: 12, y: 7, type: 'wall' }, { x: 13, y: 7, type: 'air' }, { x: 14, y: 7, type: 'pathway' }
     ]
   }
 ]

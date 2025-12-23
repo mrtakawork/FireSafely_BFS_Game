@@ -13,7 +13,7 @@ function Game() {
   const presetLevel = location.state?.level || null
 
   const [gridSize, setGridSize] = useState(presetLevel?.gridSize || 10)
-  const [doorCount, setDoorCount] = useState(null) // null 表示自動
+  const [exitCount, setExitCount] = useState(null) // null 表示自動
   const [obstaclePercentage, setObstaclePercentage] = useState(15)
   const [maxAttempts, setMaxAttempts] = useState(5)
   const [startPoints, setStartPoints] = useState([])
@@ -31,7 +31,7 @@ function Game() {
       gridSize, 
       gameMode, 
       presetLevel, 
-      doorCount, 
+      exitCount, 
       obstaclePercentage
     )
     
@@ -109,8 +109,8 @@ function Game() {
       }
     }
     
-    if (config.doorCount !== undefined && config.doorCount !== doorCount) {
-      setDoorCount(config.doorCount)
+    if (config.exitCount !== undefined && config.exitCount !== exitCount) {
+      setExitCount(config.exitCount)
       shouldReinitialize = true
     }
     
@@ -152,7 +152,7 @@ function Game() {
         </div>
         <GameConfig
           gridSize={gridSize}
-          doorCount={doorCount}
+          exitCount={exitCount}
           obstaclePercentage={obstaclePercentage}
           maxAttempts={maxAttempts}
           onConfigChange={handleConfigChange}

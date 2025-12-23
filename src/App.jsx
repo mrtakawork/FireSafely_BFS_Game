@@ -2,6 +2,7 @@ import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
 import Game from './pages/Game'
+import LevelEditor from './pages/LevelEditor'
 import './App.css'
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/game" element={<Game />} />
+      <Route path="/editor" element={<LevelEditor />} />
     </Routes>
   )
 }
