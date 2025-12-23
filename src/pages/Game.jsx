@@ -44,14 +44,18 @@ function Game() {
     setObstacles(mapData.obstacles)
     setAllCellDistances(mapData.allCellDistances)
     setGuessedPoints([])
-    setGameStatus('playing')
+    setGameStatus('waiting')
     setAttempts(0)
     setScore(0)
   }
 
   // 處理格子點擊
   const handleCellClick = (x, y) => {
-    if (gameStatus !== 'playing') return
+    if(gameStatus === 'waiting'){
+      setGameStatus('playing')
+    }else if (gameStatus !== 'playing'){
+      return
+    }
     if (startPoints.some(sp => sp.x === x && sp.y === y)) return
     if (checkIsObstacle(x, y, obstacles)) return
     if (guessedPoints.some(p => p.x === x && p.y === y)) return

@@ -37,7 +37,8 @@ const GameConfig = ({
     })
   }
 
-  const isDisabled = gameStatus === 'playing' || gameMode === 'preset'
+  // const isDisabled = gameStatus === 'playing' || gameMode === 'preset'
+  const isDisabled = gameStatus === 'playing'
 
   return (
     <div className="game-config">
