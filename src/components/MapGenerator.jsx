@@ -83,7 +83,7 @@ const generateStartPoints = (gridSize, exitCount = null) => {
 const OBSTACLE_TYPES = ['wall', 'air', 'pathway']
 
 // 生成障礙物
-const generateObstacles = (startPoints, gridSize, obstaclePercentage = 15) => {
+const generateObstacles = (startPoints, gridSize, obstaclePercentage = 15, onlyWallObstacles = true) => {
   const count = Math.floor(gridSize * gridSize * (obstaclePercentage / 100))
   const obstacles = []
   const used = new Set(startPoints.map(sp => `${sp.x}-${sp.y}`))
@@ -95,8 +95,8 @@ const generateObstacles = (startPoints, gridSize, obstaclePercentage = 15) => {
     
     if (!used.has(key)) {
       used.add(key)
-      // 隨機選擇障礙物類型
-      const type = OBSTACLE_TYPES[Math.floor(Math.random() * OBSTACLE_TYPES.length)]
+      // 如果只生成牆壁障礙物，則固定為 wall 類型；否則隨機選擇
+      const type = onlyWallObstacles ? 'wall' : OBSTACLE_TYPES[Math.floor(Math.random() * OBSTACLE_TYPES.length)]
       obstacles.push({ x, y, type })
     }
   }
@@ -112,11 +112,11 @@ const calculateDistanceToNearestStart = (point, startPoints, obstacles, gridSize
 }
 
 // 生成完整的地圖數據
-export const generateMap = (gridSize, gameMode = 'random', presetLevel = null, exitCount = null, obstaclePercentage = 15) => {
+export const generateMap = (gridSize, gameMode = 'random', presetLevel = null, exitCount = null, obstaclePercentage = 15, onlyWallObstacles = true) => {
   const isPreset = gameMode === 'preset' && presetLevel
   const finalGridSize = isPreset ? presetLevel.gridSize : gridSize
   const startPoints = isPreset ? [...presetLevel.startPoints] : generateStartPoints(finalGridSize, exitCount)
-  let obstacles = isPreset ? [...presetLevel.obstacles] : generateObstacles(startPoints, finalGridSize, obstaclePercentage)
+  let obstacles = isPreset ? [...presetLevel.obstacles] : generateObstacles(startPoints, finalGridSize, obstaclePercentage, onlyWallObstacles)
   const doorBlocks = isPreset ? (presetLevel.doorBlocks || []) : []
   
   // 為預設關卡中沒有類型的障礙物添加隨機類型（向後兼容）

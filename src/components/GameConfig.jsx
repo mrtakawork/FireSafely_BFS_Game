@@ -6,6 +6,7 @@ const GameConfig = ({
   exitCount,
   obstaclePercentage,
   maxAttempts,
+  onlyWallObstacles,
   onConfigChange,
   gameMode,
   gameStatus
@@ -14,13 +15,15 @@ const GameConfig = ({
   const [localExitCount, setLocalExitCount] = useState(exitCount)
   const [localObstaclePercentage, setLocalObstaclePercentage] = useState(obstaclePercentage)
   const [localMaxAttempts, setLocalMaxAttempts] = useState(maxAttempts)
+  const [localOnlyWallObstacles, setLocalOnlyWallObstacles] = useState(onlyWallObstacles)
 
   const handleApply = () => {
     onConfigChange({
       gridSize: localGridSize,
       exitCount: localExitCount,
       obstaclePercentage: localObstaclePercentage,
-      maxAttempts: localMaxAttempts
+      maxAttempts: localMaxAttempts,
+      onlyWallObstacles: localOnlyWallObstacles
     })
   }
 
@@ -29,11 +32,13 @@ const GameConfig = ({
     setLocalExitCount(null)
     setLocalObstaclePercentage(15)
     setLocalMaxAttempts(5)
+    setLocalOnlyWallObstacles(true)
     onConfigChange({
       gridSize: 10,
       exitCount: null,
       obstaclePercentage: 15,
-      maxAttempts: 5
+      maxAttempts: 5,
+      onlyWallObstacles: true
     })
   }
 
@@ -134,6 +139,22 @@ const GameConfig = ({
             </button>
           ))}
         </div>
+      </div>
+
+      <div className="config-group">
+        <label htmlFor="config-only-wall">
+          <input
+            type="checkbox"
+            id="config-only-wall"
+            checked={localOnlyWallObstacles}
+            onChange={(e) => setLocalOnlyWallObstacles(e.target.checked)}
+            disabled={isDisabled}
+          />
+          只生成牆壁障礙物（默認）
+        </label>
+        <p className="config-hint">
+          啟用此選項後，只會生成黑色牆壁障礙物，不會生成空氣塊和通道塊
+        </p>
       </div>
 
       <div className="config-group">

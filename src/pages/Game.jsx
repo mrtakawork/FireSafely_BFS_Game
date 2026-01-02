@@ -16,6 +16,7 @@ function Game() {
   const [exitCount, setExitCount] = useState(null) // null 表示自動
   const [obstaclePercentage, setObstaclePercentage] = useState(15)
   const [maxAttempts, setMaxAttempts] = useState(5)
+  const [onlyWallObstacles, setOnlyWallObstacles] = useState(true) // 默認只生成牆壁障礙物
   const [startPoints, setStartPoints] = useState([])
   const [farthestPoints, setFarthestPoints] = useState([])
   const [guessedPoints, setGuessedPoints] = useState([])
@@ -33,7 +34,8 @@ function Game() {
       gameMode, 
       presetLevel, 
       exitCount, 
-      obstaclePercentage
+      obstaclePercentage,
+      onlyWallObstacles
     )
     
     if (mapData.gridSize !== gridSize) {
@@ -123,6 +125,11 @@ function Game() {
       shouldReinitialize = true
     }
     
+    if (config.onlyWallObstacles !== undefined && config.onlyWallObstacles !== onlyWallObstacles) {
+      setOnlyWallObstacles(config.onlyWallObstacles)
+      shouldReinitialize = true
+    }
+    
     if (config.maxAttempts !== undefined && config.maxAttempts !== maxAttempts) {
       setMaxAttempts(config.maxAttempts)
       // 不需要重新初始化遊戲，只更新嘗試次數限制
@@ -159,6 +166,7 @@ function Game() {
           exitCount={exitCount}
           obstaclePercentage={obstaclePercentage}
           maxAttempts={maxAttempts}
+          onlyWallObstacles={onlyWallObstacles}
           onConfigChange={handleConfigChange}
           gameMode={gameMode}
           gameStatus={gameStatus}
