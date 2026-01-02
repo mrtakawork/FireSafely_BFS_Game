@@ -10,10 +10,11 @@ function LevelEditor() {
   const importedLevel = location.state?.importedLevel
 
   const [gridSize, setGridSize] = useState(importedLevel?.gridSize || 10)
-  const [cellType, setCellType] = useState('exit') // 'exit', 'obstacle', 'empty'
+  const [cellType, setCellType] = useState('exit') // 'exit', 'obstacle', 'door-block', 'empty'
   const [obstacleType, setObstacleType] = useState('wall') // 'wall', 'air', 'pathway'
   const [startPoints, setStartPoints] = useState(importedLevel?.startPoints || [])
   const [obstacles, setObstacles] = useState(importedLevel?.obstacles || [])
+  const [doorBlocks, setDoorBlocks] = useState(importedLevel?.doorBlocks || [])
   const [levelName, setLevelName] = useState(importedLevel?.name || '')
   const [previewMode, setPreviewMode] = useState(false)
   const [previewData, setPreviewData] = useState(null)
@@ -23,6 +24,7 @@ function LevelEditor() {
     if (!importedLevel) {
       setStartPoints([])
       setObstacles([])
+      setDoorBlocks([])
       setLevelName('')
     }
   }, [gridSize, importedLevel])
@@ -33,14 +35,16 @@ function LevelEditor() {
 
     const isStart = startPoints.some(sp => sp.x === x && sp.y === y)
     const isObstacle = obstacles.some(obs => obs.x === x && obs.y === y)
+    const isDoorBlock = doorBlocks.some(db => db.x === x && db.y === y)
 
     if (cellType === 'exit') {
       // 切換 Exit
       if (isStart) {
         setStartPoints(startPoints.filter(sp => !(sp.x === x && sp.y === y)))
       } else {
-        // 移除該位置的障礙物
+        // 移除該位置的其他元素
         setObstacles(obstacles.filter(obs => !(obs.x === x && obs.y === y)))
+        setDoorBlocks(doorBlocks.filter(db => !(db.x === x && db.y === y)))
         // 添加 Exit
         setStartPoints([...startPoints, { x, y }])
       }
@@ -49,15 +53,28 @@ function LevelEditor() {
       if (isObstacle) {
         setObstacles(obstacles.filter(obs => !(obs.x === x && obs.y === y)))
       } else {
-        // 移除該位置的 Exit
+        // 移除該位置的其他元素
         setStartPoints(startPoints.filter(sp => !(sp.x === x && sp.y === y)))
+        setDoorBlocks(doorBlocks.filter(db => !(db.x === x && db.y === y)))
         // 添加障礙物
         setObstacles([...obstacles, { x, y, type: obstacleType }])
+      }
+    } else if (cellType === 'door-block') {
+      // 切換 door block
+      if (isDoorBlock) {
+        setDoorBlocks(doorBlocks.filter(db => !(db.x === x && db.y === y)))
+      } else {
+        // 移除該位置的其他元素
+        setStartPoints(startPoints.filter(sp => !(sp.x === x && sp.y === y)))
+        setObstacles(obstacles.filter(obs => !(obs.x === x && obs.y === y)))
+        // 添加 door block
+        setDoorBlocks([...doorBlocks, { x, y }])
       }
     } else if (cellType === 'empty') {
       // 清除該位置
       setStartPoints(startPoints.filter(sp => !(sp.x === x && sp.y === y)))
       setObstacles(obstacles.filter(obs => !(obs.x === x && obs.y === y)))
+      setDoorBlocks(doorBlocks.filter(db => !(db.x === x && db.y === y)))
     }
   }
 
@@ -72,7 +89,8 @@ function LevelEditor() {
       name: levelName || '未命名關卡',
       gridSize,
       startPoints,
-      obstacles
+      obstacles,
+      doorBlocks
     }
 
     const mapData = generateMap(gridSize, 'preset', level)
@@ -103,6 +121,7 @@ function LevelEditor() {
       gridSize,
       startPoints: [...startPoints],
       obstacles: [...obstacles],
+      doorBlocks: [...doorBlocks],
       difficulty: '自定義'
     }
 
@@ -126,6 +145,7 @@ function LevelEditor() {
       gridSize,
       startPoints: [...startPoints],
       obstacles: [...obstacles],
+      doorBlocks: [...doorBlocks],
       difficulty: '自定義'
     }
 
@@ -137,6 +157,7 @@ function LevelEditor() {
     if (window.confirm('確定要清除所有內容嗎？')) {
       setStartPoints([])
       setObstacles([])
+      setDoorBlocks([])
     }
   }
 
@@ -144,9 +165,11 @@ function LevelEditor() {
   const getCellInfo = (x, y) => {
     const isStart = startPoints.some(sp => sp.x === x && sp.y === y)
     const obstacle = obstacles.find(obs => obs.x === x && obs.y === y)
+    const doorBlock = doorBlocks.find(db => db.x === x && db.y === y)
     
     if (isStart) return { type: 'exit', content: 'Exit' }
     if (obstacle) return { type: 'obstacle', subtype: obstacle.type, content: '' }
+    if (doorBlock) return { type: 'door-block', content: '🚪' }
     return { type: 'empty', content: '' }
   }
 
@@ -205,6 +228,12 @@ function LevelEditor() {
                   🧱 障礙物
                 </button>
                 <button
+                  className={`tool-btn ${cellType === 'door-block' ? 'active' : ''}`}
+                  onClick={() => setCellType('door-block')}
+                >
+                  🚪 門方塊
+                </button>
+                <button
                   className={`tool-btn ${cellType === 'empty' ? 'active' : ''}`}
                   onClick={() => setCellType('empty')}
                 >
@@ -242,8 +271,9 @@ function LevelEditor() {
             <div className="editor-section">
               <h3>統計信息</h3>
               <div className="stats">
-                <div>門數量: {startPoints.length}</div>
+                <div>Exit 數量: {startPoints.length}</div>
                 <div>障礙物數量: {obstacles.length}</div>
+                <div>門方塊數量: {doorBlocks.length}</div>
                 <div>網格大小: {gridSize}x{gridSize}</div>
               </div>
             </div>
@@ -293,6 +323,7 @@ function LevelEditor() {
                     const isStart = previewData.startPoints.some(sp => sp.x === x && sp.y === y)
                     const isObstacle = previewData.obstacles.some(obs => obs.x === x && obs.y === y)
                     const obstacle = previewData.obstacles.find(obs => obs.x === x && obs.y === y)
+                    const isDoorBlock = previewData.doorBlocks && previewData.doorBlocks.some(db => db.x === x && db.y === y)
                     const isFarthest = previewData.farthestPoints.some(fp => fp.x === x && fp.y === y)
                     const distance = previewData.allCellDistances[`${x}-${y}`]
 
@@ -300,14 +331,16 @@ function LevelEditor() {
                     if (isStart) cellClass += ' start'
                     else if (isObstacle) {
                       cellClass += ` obstacle obstacle-${obstacle.type}`
-                    } else if (isFarthest) cellClass += ' farthest'
+                    } else if (isDoorBlock) cellClass += ' door-block'
+                    else if (isFarthest) cellClass += ' farthest'
                     else if (distance !== Infinity) cellClass += ' reachable'
 
                     return (
                       <div key={`${x}-${y}`} className={cellClass}>
                         {isStart && 'Exit'}
+                        {isDoorBlock && '🚪'}
                         {isFarthest && '⭐'}
-                        {!isStart && !isObstacle && !isFarthest && distance !== Infinity && distance.toFixed(0)}
+                        {!isStart && !isObstacle && !isDoorBlock && !isFarthest && distance !== Infinity && distance.toFixed(0)}
                       </div>
                     )
                   })}
@@ -330,6 +363,8 @@ function LevelEditor() {
                   if (cellInfo.type === 'exit') cellClass += ' exit'
                   else if (cellInfo.type === 'obstacle') {
                     cellClass += ` obstacle obstacle-${cellInfo.subtype}`
+                  } else if (cellInfo.type === 'door-block') {
+                    cellClass += ' door-block'
                   }
 
                   return (

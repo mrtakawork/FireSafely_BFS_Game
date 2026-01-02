@@ -2,7 +2,12 @@
 
 // 檢查點是否為障礙物
 const isObstacle = (x, y, obstaclesList) => {
-  return obstaclesList.some(obs => obs.x === x && obs.y === y)
+  return obstaclesList && obstaclesList.some(obs => obs.x === x && obs.y === y)
+}
+
+// 檢查點是否為 door block
+const isDoorBlock = (x, y, doorBlocksList) => {
+  return doorBlocksList && doorBlocksList.some(db => db.x === x && db.y === y)
 }
 
 // 檢查點是否在網格範圍內
@@ -10,8 +15,8 @@ const isValidCell = (x, y, gridSize) => {
   return x >= 0 && x < gridSize && y >= 0 && y < gridSize
 }
 
-// 使用 BFS 計算考慮障礙物的最短路徑距離
-const calculateShortestPath = (start, end, obstaclesList, gridSize) => {
+// 使用 BFS 計算考慮障礙物的最短路徑距離（door blocks 可以通過）
+const calculateShortestPath = (start, end, obstaclesList, gridSize, doorBlocksList = []) => {
   if (start.x === end.x && start.y === end.y) return 0
   
   if (isObstacle(end.x, end.y, obstaclesList)) return Infinity
@@ -39,6 +44,7 @@ const calculateShortestPath = (start, end, obstaclesList, gridSize) => {
       const newY = current.y + dir.dy
       const key = `${newX}-${newY}`
       
+      // door blocks 可以通過，只有障礙物不能通過
       if (isValidCell(newX, newY, gridSize) && 
           !visited.has(key) && 
           !isObstacle(newX, newY, obstaclesList)) {
@@ -99,9 +105,9 @@ const generateObstacles = (startPoints, gridSize, obstaclePercentage = 15) => {
 }
 
 // 計算點到所有起點的最短距離
-const calculateDistanceToNearestStart = (point, startPoints, obstacles, gridSize) => {
+const calculateDistanceToNearestStart = (point, startPoints, obstacles, gridSize, doorBlocks = []) => {
   return Math.min(
-    ...startPoints.map(start => calculateShortestPath(start, point, obstacles, gridSize))
+    ...startPoints.map(start => calculateShortestPath(start, point, obstacles, gridSize, doorBlocks))
   )
 }
 
@@ -111,6 +117,7 @@ export const generateMap = (gridSize, gameMode = 'random', presetLevel = null, e
   const finalGridSize = isPreset ? presetLevel.gridSize : gridSize
   const startPoints = isPreset ? [...presetLevel.startPoints] : generateStartPoints(finalGridSize, exitCount)
   let obstacles = isPreset ? [...presetLevel.obstacles] : generateObstacles(startPoints, finalGridSize, obstaclePercentage)
+  const doorBlocks = isPreset ? (presetLevel.doorBlocks || []) : []
   
   // 為預設關卡中沒有類型的障礙物添加隨機類型（向後兼容）
   obstacles = obstacles.map(obs => {
@@ -129,7 +136,14 @@ export const generateMap = (gridSize, gameMode = 'random', presetLevel = null, e
     for (let y = 0; y < finalGridSize; y++) {
       const key = `${x}-${y}`
       
+      // 障礙物和 door blocks 都不計算距離
       if (isObstacle(x, y, obstacles)) {
+        allCellDistances[key] = Infinity
+        continue
+      }
+      
+      if (isDoorBlock(x, y, doorBlocks)) {
+        // door blocks 可以通過，但不作為答案候選
         allCellDistances[key] = Infinity
         continue
       }
@@ -139,9 +153,10 @@ export const generateMap = (gridSize, gameMode = 'random', presetLevel = null, e
         continue
       }
       
-      const distance = calculateDistanceToNearestStart({ x, y }, startPoints, obstacles, finalGridSize)
+      const distance = calculateDistanceToNearestStart({ x, y }, startPoints, obstacles, finalGridSize, doorBlocks)
       allCellDistances[key] = distance
       
+      // 只有非 Infinity 的距離才考慮為最遠點（排除 door blocks）
       if (distance !== Infinity) {
         if (distance > maxDistance) {
           maxDistance = distance
@@ -159,13 +174,14 @@ export const generateMap = (gridSize, gameMode = 'random', presetLevel = null, e
     return generateMap(gridSize, gameMode, presetLevel)
   }
   
-  return { gridSize: finalGridSize, startPoints, obstacles, farthestPoints, allCellDistances }
+  return { gridSize: finalGridSize, startPoints, obstacles, doorBlocks, farthestPoints, allCellDistances }
 }
 
 // 導出工具函數供其他組件使用
-export const calculateDistanceToNearestStartForPoint = (point, startPoints, obstacles, gridSize) => {
-  return calculateDistanceToNearestStart(point, startPoints, obstacles, gridSize)
+export const calculateDistanceToNearestStartForPoint = (point, startPoints, obstacles, gridSize, doorBlocks = []) => {
+  return calculateDistanceToNearestStart(point, startPoints, obstacles, gridSize, doorBlocks)
 }
 
 export const checkIsObstacle = isObstacle
+export const checkIsDoorBlock = isDoorBlock
 

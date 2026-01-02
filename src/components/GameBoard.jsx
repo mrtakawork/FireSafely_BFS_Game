@@ -9,7 +9,8 @@ const GameBoard = ({
   gameStatus,
   onCellClick,
   allCellDistances,
-  obstacles
+  obstacles,
+  doorBlocks
 }) => {
   // 檢查是否為障礙物
   const isObstacle = (x, y) => {
@@ -20,6 +21,11 @@ const GameBoard = ({
   const getObstacleType = (x, y) => {
     const obstacle = obstacles && obstacles.find(obs => obs.x === x && obs.y === y)
     return obstacle?.type || 'wall' // 默認為 wall 類型（向後兼容）
+  }
+
+  // 檢查是否為 door block
+  const isDoorBlock = (x, y) => {
+    return doorBlocks && doorBlocks.some(db => db.x === x && db.y === y)
   }
 
   // 檢查是否為起點
@@ -77,6 +83,7 @@ const GameBoard = ({
       const obstacleType = getObstacleType(x, y)
       return classes + ` obstacle obstacle-${obstacleType}`
     }
+    if (isDoorBlock(x, y)) return classes + ' door-block'
     if (isStartPoint(x, y)) return classes + ' start-point'
     if (gameStatus !== 'playing' && gameStatus !== 'waiting' && isFarthestPoint(x, y)) return classes + ' farthest-point'
     
@@ -95,6 +102,7 @@ const GameBoard = ({
 
   const getCellContent = (x, y, guessedPoint, distance) => {
     if (isObstacle(x, y)) return ''
+    if (isDoorBlock(x, y)) return '🚪'
     if (isStartPoint(x, y)) return 'Exit'
     
     if (guessedPoint && gameStatus === 'playing') {
@@ -118,6 +126,7 @@ const GameBoard = ({
       }
       return typeNames[obstacleType] || '障礙物'
     }
+    if (isDoorBlock(x, y)) return '門方塊（可通過，但不可選中）'
     if (isStartPoint(x, y)) return 'Exit'
     
     if (guessedPoint) {
@@ -155,6 +164,7 @@ const GameBoard = ({
           const shouldApplyDistanceColor = 
             isGameEnded &&
             !isObstacle(x, y) && 
+            !isDoorBlock(x, y) &&
             !isStartPoint(x, y) && 
             !isFarthestPoint(x, y) &&
             !guessedPoint &&
@@ -167,12 +177,14 @@ const GameBoard = ({
             : null
           const textColor = backgroundColor ? getTextColor(backgroundColor) : null
           
+          const isClickable = !isDoorBlock(x, y) && !isObstacle(x, y) && !isStartPoint(x, y)
+          
           return (
             <div
               key={`${x}-${y}`}
               className={getCellClass(x, y, guessedPoint)}
               style={backgroundColor ? { backgroundColor, color: textColor } : {}}
-              onClick={() => onCellClick(x, y)}
+              onClick={isClickable ? () => onCellClick(x, y) : undefined}
               title={getCellTitle(x, y, distance, guessedPoint)}
             >
               {getCellContent(x, y, guessedPoint, distance)}
