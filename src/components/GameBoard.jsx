@@ -102,8 +102,10 @@ const GameBoard = ({
 
   const getCellContent = (x, y, guessedPoint, distance) => {
     if (isObstacle(x, y)) return ''
-    if (isDoorBlock(x, y)) return '🚪'
-    if (isStartPoint(x, y)) return 'Exit'
+    if (isDoorBlock(x, y)) return ''
+    if (isStartPoint(x, y)) return (
+      <img src="/exit_sign.png" alt="Exit" className="cell-exit-sign" />
+    )
     
     if (guessedPoint && gameStatus === 'playing') {
       return guessedPoint.distance === Infinity ? '∞' : guessedPoint.distance.toFixed(1)

@@ -270,16 +270,48 @@
 }
 
 .editor-cell.exit {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  font-weight: 700;
+  background: #f0f0f0;
+  padding: 2px;
 }
 
+.editor-cell.exit .editor-exit-sign,
+.preview-cell.start .editor-exit-sign {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* 建築平面圖風格：門 */
 .editor-cell.door-block {
-  background: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);
-  border: 2px solid #ff8c00;
+  background: #f1f1f1;
   cursor: pointer;
-  font-size: 1.2rem;
+  font-size: 0;
+  position: relative;
+  overflow: visible;
+}
+.editor-cell.door-block::before {
+  content: '';
+  position: absolute;
+  top: 8%;
+  left: 0;
+  width: 80%;
+  height: 2.5px;
+  min-height: 2px;
+  background: #212529;
+  box-sizing: border-box;
+}
+.editor-cell.door-block::after {
+  content: '';
+  position: absolute;
+  top: 15;
+  left: 0;
+  width: 80%;
+  height: 80%;
+  box-sizing: border-box;
+  border-right: 2.5px solid #212529;
+  border-bottom: 2.5px solid #212529;
+  border-radius: 0 0 100% 0;
 }
 
 .editor-cell.obstacle {
@@ -367,8 +399,7 @@
 }
 
 .preview-cell.start {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: #f0f0f0;
 }
 
 .preview-cell.obstacle-wall {
@@ -384,9 +415,34 @@
 }
 
 .preview-cell.door-block {
-  background: linear-gradient(135deg, #ffd700 0%, #ffa500 100%);
-  border: 2px solid #ff8c00;
-  font-size: 1.2rem;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  font-size: 0;
+  position: relative;
+  overflow: visible;
+}
+.preview-cell.door-block::before {
+  content: '';
+  position: absolute;
+  top: 8%;
+  left: 0;
+  width: 80%;
+  height: 5px;
+  min-height: 2px;
+  background: #212529;
+  box-sizing: border-box;
+}
+.preview-cell.door-block::after {
+  content: '';
+  position: absolute;
+  top: 10%;
+  left: 0;
+  width: 80%;
+  height: 80%;
+  box-sizing: border-box;
+  border-right: 2.5px solid #212529;
+  border-bottom: 2.5px solid #212529;
+  border-radius: 0 0 100% 0;
 }
 
 .preview-cell.farthest {

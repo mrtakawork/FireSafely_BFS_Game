@@ -169,7 +169,7 @@ function LevelEditor() {
     
     if (isStart) return { type: 'exit', content: 'Exit' }
     if (obstacle) return { type: 'obstacle', subtype: obstacle.type, content: '' }
-    if (doorBlock) return { type: 'door-block', content: '🚪' }
+    if (doorBlock) return { type: 'door-block', content: '' }
     return { type: 'empty', content: '' }
   }
 
@@ -337,8 +337,7 @@ function LevelEditor() {
 
                     return (
                       <div key={`${x}-${y}`} className={cellClass}>
-                        {isStart && 'Exit'}
-                        {isDoorBlock && '🚪'}
+                        {isStart && <img src="/exit_sign.png" alt="Exit" className="editor-exit-sign" />}
                         {isFarthest && '⭐'}
                         {!isStart && !isObstacle && !isDoorBlock && !isFarthest && distance !== Infinity && distance.toFixed(0)}
                       </div>
@@ -374,7 +373,11 @@ function LevelEditor() {
                       onClick={() => handleCellClick(x, y)}
                       title={`(${x}, ${y})`}
                     >
-                      {cellInfo.content}
+                      {cellInfo.type === 'exit' ? (
+                        <img src="/exit_sign.png" alt="Exit" className="editor-exit-sign" />
+                      ) : (
+                        cellInfo.content
+                      )}
                     </div>
                   )
                 })}
