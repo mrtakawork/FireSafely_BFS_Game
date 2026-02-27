@@ -4,6 +4,69 @@
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 20px;
+  padding-bottom: 120px; /* 為浮動工具列預留空間 */
+}
+
+/* 浮動底部編輯工具列 */
+.editor-tools-floating-bar {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  padding: 16px 24px;
+  border: 2px solid rgba(102, 126, 234, 0.3);
+}
+
+.floating-bar-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.floating-bar-title {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.tool-buttons-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.tool-buttons-row .tool-btn {
+  padding: 10px 16px;
+}
+
+.obstacle-type-selector-inline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 16px;
+  border-left: 2px solid #e0e0e0;
+}
+
+.obstacle-type-selector-inline .type-label {
+  color: #555;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.type-buttons-inline {
+  display: flex;
+  gap: 8px;
+}
+
+.type-buttons-inline .type-btn {
+  padding: 8px 14px;
+  font-size: 0.9rem;
 }
 
 .editor-container {
@@ -174,9 +237,34 @@
   border: 1px solid #e0e0e0;
 }
 
-.action-buttons {
+.editor-main {
+  flex: 1;
   display: flex;
   flex-direction: column;
+  gap: 15px;
+}
+
+.editor-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.editor-toolbar h3 {
+  margin: 0;
+  color: #333;
+  font-size: 1.1rem;
+  white-space: nowrap;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
@@ -247,6 +335,8 @@
   background: #e0e0e0;
   padding: 2px;
   border-radius: 8px;
+  width: 100%;
+  max-width: 900px;
   min-width: 400px;
   aspect-ratio: 1;
 }
@@ -323,6 +413,8 @@
   background: #e0e0e0;
   padding: 2px;
   border-radius: 8px;
+  width: 100%;
+  max-width: 900px;
   min-width: 400px;
   aspect-ratio: 1;
 }
@@ -355,6 +447,11 @@
 
   .editor-sidebar {
     width: 100%;
+  }
+
+  .editor-toolbar {
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .editor-grid,

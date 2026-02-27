@@ -10,7 +10,8 @@ function LevelEditor() {
   const importedLevel = location.state?.importedLevel
 
   const [gridSize, setGridSize] = useState(importedLevel?.gridSize || 10)
-  const [cellType, setCellType] = useState('exit') // 'exit', 'obstacle', 'door-block', 'empty'
+  const [cellType, setCellType] = useState('exit') // 'exit', 'obstacle', 'door-block', 'empty', 'eraser'
+  const [isDrawing, setIsDrawing] = useState(false)
   const [obstacleType, setObstacleType] = useState('wall') // 'wall', 'air', 'pathway'
   const [startPoints, setStartPoints] = useState(importedLevel?.startPoints || [])
   const [obstacles, setObstacles] = useState(importedLevel?.obstacles || [])
@@ -48,54 +49,71 @@ function LevelEditor() {
     }
   }, [gridSize, importedLevel])
 
-  // 處理格子點擊
-  const handleCellClick = (x, y) => {
+  // 套用工具到指定格子（供點擊與拖曳使用）
+  // isDragging: 拖曳時為 true，只做「塗上」或「擦除」，不做切換
+  const applyToolToCell = (x, y, isDragging = false) => {
     if (previewMode) return
 
-    const isStart = startPoints.some(sp => sp.x === x && sp.y === y)
-    const isObstacle = obstacles.some(obs => obs.x === x && obs.y === y)
-    const isDoorBlock = doorBlocks.some(db => db.x === x && db.y === y)
+    const tool = cellType === 'eraser' ? 'empty' : cellType
+    const currentObstacleType = obstacleType
 
-    if (cellType === 'exit') {
-      // 切換 Exit
-      if (isStart) {
-        setStartPoints(startPoints.filter(sp => !(sp.x === x && sp.y === y)))
-      } else {
-        // 移除該位置的其他元素
-        setObstacles(obstacles.filter(obs => !(obs.x === x && obs.y === y)))
-        setDoorBlocks(doorBlocks.filter(db => !(db.x === x && db.y === y)))
-        // 添加 Exit
-        setStartPoints([...startPoints, { x, y }])
-      }
-    } else if (cellType === 'obstacle') {
-      // 切換障礙物
-      if (isObstacle) {
-        setObstacles(obstacles.filter(obs => !(obs.x === x && obs.y === y)))
-      } else {
-        // 移除該位置的其他元素
-        setStartPoints(startPoints.filter(sp => !(sp.x === x && sp.y === y)))
-        setDoorBlocks(doorBlocks.filter(db => !(db.x === x && db.y === y)))
-        // 添加障礙物
-        setObstacles([...obstacles, { x, y, type: obstacleType }])
-      }
-    } else if (cellType === 'door-block') {
-      // 切換 door block
-      if (isDoorBlock) {
-        setDoorBlocks(doorBlocks.filter(db => !(db.x === x && db.y === y)))
-      } else {
-        // 移除該位置的其他元素
-        setStartPoints(startPoints.filter(sp => !(sp.x === x && sp.y === y)))
-        setObstacles(obstacles.filter(obs => !(obs.x === x && obs.y === y)))
-        // 添加 door block
-        setDoorBlocks([...doorBlocks, { x, y }])
-      }
-    } else if (cellType === 'empty') {
-      // 清除該位置
-      setStartPoints(startPoints.filter(sp => !(sp.x === x && sp.y === y)))
-      setObstacles(obstacles.filter(obs => !(obs.x === x && obs.y === y)))
-      setDoorBlocks(doorBlocks.filter(db => !(db.x === x && db.y === y)))
+    const clearCell = () => {
+      setStartPoints(prev => prev.filter(sp => !(sp.x === x && sp.y === y)))
+      setObstacles(prev => prev.filter(obs => !(obs.x === x && obs.y === y)))
+      setDoorBlocks(prev => prev.filter(db => !(db.x === x && db.y === y)))
+    }
+
+    if (tool === 'exit') {
+      setStartPoints(prev => {
+        const isStart = prev.some(sp => sp.x === x && sp.y === y)
+        if (isStart && !isDragging) return prev.filter(sp => !(sp.x === x && sp.y === y))
+        if (isStart && isDragging) return prev
+        return [...prev.filter(sp => !(sp.x === x && sp.y === y)), { x, y }]
+      })
+      setObstacles(prev => prev.filter(obs => !(obs.x === x && obs.y === y)))
+      setDoorBlocks(prev => prev.filter(db => !(db.x === x && db.y === y)))
+    } else if (tool === 'obstacle') {
+      setObstacles(prev => {
+        const isObstacle = prev.some(obs => obs.x === x && obs.y === y)
+        if (isObstacle && !isDragging) return prev.filter(obs => !(obs.x === x && obs.y === y))
+        if (isObstacle && isDragging) return prev
+        return [...prev.filter(obs => !(obs.x === x && obs.y === y)), { x, y, type: currentObstacleType }]
+      })
+      setStartPoints(prev => prev.filter(sp => !(sp.x === x && sp.y === y)))
+      setDoorBlocks(prev => prev.filter(db => !(db.x === x && db.y === y)))
+    } else if (tool === 'door-block') {
+      setDoorBlocks(prev => {
+        const isDoorBlock = prev.some(db => db.x === x && db.y === y)
+        if (isDoorBlock && !isDragging) return prev.filter(db => !(db.x === x && db.y === y))
+        if (isDoorBlock && isDragging) return prev
+        return [...prev.filter(db => !(db.x === x && db.y === y)), { x, y }]
+      })
+      setStartPoints(prev => prev.filter(sp => !(sp.x === x && sp.y === y)))
+      setObstacles(prev => prev.filter(obs => !(obs.x === x && obs.y === y)))
+    } else if (tool === 'empty') {
+      clearCell()
     }
   }
+
+  // 拖曳繪製：滑鼠按下開始（單擊或拖曳的第一格）
+  const handleCellMouseDown = (x, y) => {
+    if (previewMode) return
+    setIsDrawing(true)
+    applyToolToCell(x, y, false)
+  }
+
+  // 拖曳繪製：滑鼠移入格子時（像筆一樣連續塗上）
+  const handleCellMouseEnter = (x, y) => {
+    if (previewMode || !isDrawing) return
+    applyToolToCell(x, y, true)
+  }
+
+  // 全域滑鼠放開時結束拖曳
+  useEffect(() => {
+    const handleMouseUp = () => setIsDrawing(false)
+    window.addEventListener('mouseup', handleMouseUp)
+    return () => window.removeEventListener('mouseup', handleMouseUp)
+  }, [])
 
   // 預覽關卡
   const handlePreview = () => {
@@ -232,62 +250,6 @@ function LevelEditor() {
             </div>
 
             <div className="editor-section">
-              <h3>編輯工具</h3>
-              <div className="tool-buttons">
-                <button
-                  className={`tool-btn ${cellType === 'exit' ? 'active' : ''}`}
-                  onClick={() => setCellType('exit')}
-                >
-                  🚪 Exit
-                </button>
-                <button
-                  className={`tool-btn ${cellType === 'obstacle' ? 'active' : ''}`}
-                  onClick={() => setCellType('obstacle')}
-                >
-                  🧱 障礙物
-                </button>
-                <button
-                  className={`tool-btn ${cellType === 'door-block' ? 'active' : ''}`}
-                  onClick={() => setCellType('door-block')}
-                >
-                  🚪 門方塊
-                </button>
-                <button
-                  className={`tool-btn ${cellType === 'empty' ? 'active' : ''}`}
-                  onClick={() => setCellType('empty')}
-                >
-                  🗑️ 清除
-                </button>
-              </div>
-
-              {cellType === 'obstacle' && (
-                <div className="obstacle-type-selector">
-                  <label>障礙物類型:</label>
-                  <div className="type-buttons">
-                    <button
-                      className={`type-btn ${obstacleType === 'wall' ? 'active' : ''}`}
-                      onClick={() => setObstacleType('wall')}
-                    >
-                      牆壁
-                    </button>
-                    <button
-                      className={`type-btn ${obstacleType === 'air' ? 'active' : ''}`}
-                      onClick={() => setObstacleType('air')}
-                    >
-                      空氣塊
-                    </button>
-                    <button
-                      className={`type-btn ${obstacleType === 'pathway' ? 'active' : ''}`}
-                      onClick={() => setObstacleType('pathway')}
-                    >
-                      通道塊
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="editor-section">
               <h3>統計信息</h3>
               <div className="stats">
                 <div>Exit 數量: {startPoints.length}</div>
@@ -296,8 +258,10 @@ function LevelEditor() {
                 <div>網格大小: {gridSize}x{gridSize}</div>
               </div>
             </div>
+          </div>
 
-            <div className="editor-section">
+          <div className="editor-main">
+            <div className="editor-toolbar">
               <h3>操作</h3>
               <div className="action-buttons">
                 <button className="btn-preview" onClick={handlePreview}>
@@ -314,9 +278,7 @@ function LevelEditor() {
                 </button>
               </div>
             </div>
-          </div>
-
-          <div className="editor-board">
+            <div className="editor-board">
             {previewMode && previewData ? (
               <div className="preview-mode">
                 <div className="preview-header">
@@ -391,7 +353,11 @@ function LevelEditor() {
                     <div
                       key={`${x}-${y}`}
                       className={cellClass}
-                      onClick={() => handleCellClick(x, y)}
+                      onMouseDown={(e) => {
+                        e.preventDefault()
+                        handleCellMouseDown(x, y)
+                      }}
+                      onMouseEnter={() => handleCellMouseEnter(x, y)}
                       title={`(${x}, ${y})`}
                     >
                       {cellInfo.type === 'exit' ? (
@@ -404,9 +370,70 @@ function LevelEditor() {
                 })}
               </div>
             )}
+            </div>
           </div>
         </div>
       </div>
+
+      {/* 浮動底部工具列 */}
+      {!previewMode && (
+        <div className="editor-tools-floating-bar">
+          <div className="floating-bar-content">
+            <h3 className="floating-bar-title">編輯工具</h3>
+            <div className="tool-buttons-row">
+              <button
+                className={`tool-btn ${cellType === 'exit' ? 'active' : ''}`}
+                onClick={() => setCellType('exit')}
+              >
+                🚪 Exit
+              </button>
+              <button
+                className={`tool-btn ${cellType === 'obstacle' ? 'active' : ''}`}
+                onClick={() => setCellType('obstacle')}
+              >
+                🧱 障礙物
+              </button>
+              <button
+                className={`tool-btn ${cellType === 'door-block' ? 'active' : ''}`}
+                onClick={() => setCellType('door-block')}
+              >
+                🚪 門方塊
+              </button>
+              <button
+                className={`tool-btn ${cellType === 'empty' ? 'active' : ''}`}
+                onClick={() => setCellType('empty')}
+              >
+                🧽 橡皮擦
+              </button>
+            </div>
+            {cellType === 'obstacle' && (
+              <div className="obstacle-type-selector-inline">
+                <span className="type-label">障礙物類型:</span>
+                <div className="type-buttons-inline">
+                  <button
+                    className={`type-btn ${obstacleType === 'wall' ? 'active' : ''}`}
+                    onClick={() => setObstacleType('wall')}
+                  >
+                    牆壁
+                  </button>
+                  <button
+                    className={`type-btn ${obstacleType === 'air' ? 'active' : ''}`}
+                    onClick={() => setObstacleType('air')}
+                  >
+                    空氣塊
+                  </button>
+                  <button
+                    className={`type-btn ${obstacleType === 'pathway' ? 'active' : ''}`}
+                    onClick={() => setObstacleType('pathway')}
+                  >
+                    通道塊
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
