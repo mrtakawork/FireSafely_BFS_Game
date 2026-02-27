@@ -424,10 +424,10 @@
 .preview-cell.door-block::before {
   content: '';
   position: absolute;
-  top: 8%;
+  top: 6%;
   left: 0;
-  width: 80%;
-  height: 5px;
+  width: 100%;
+  height: 2.5px;
   min-height: 2px;
   background: #212529;
   box-sizing: border-box;
@@ -435,10 +435,10 @@
 .preview-cell.door-block::after {
   content: '';
   position: absolute;
-  top: 10%;
+  top: 0;
   left: 0;
-  width: 80%;
-  height: 80%;
+  width: 100%;
+  height: 100%;
   box-sizing: border-box;
   border-right: 2.5px solid #212529;
   border-bottom: 2.5px solid #212529;
