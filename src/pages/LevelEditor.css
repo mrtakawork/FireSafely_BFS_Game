@@ -1,3 +1,5 @@
+@import '../styles/SharedBlockStyles.css';
+
 .level-editor {
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -269,69 +271,6 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.editor-cell.exit {
-  background: #f0f0f0;
-  padding: 2px;
-}
-
-.editor-cell.exit .editor-exit-sign,
-.preview-cell.start .editor-exit-sign {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  display: block;
-}
-
-/* 建築平面圖風格：門 */
-.editor-cell.door-block {
-  background: #f1f1f1;
-  cursor: pointer;
-  font-size: 0;
-  position: relative;
-  overflow: visible;
-}
-.editor-cell.door-block::before {
-  content: '';
-  position: absolute;
-  top: 8%;
-  left: 0;
-  width: 80%;
-  height: 2.5px;
-  min-height: 2px;
-  background: #212529;
-  box-sizing: border-box;
-}
-.editor-cell.door-block::after {
-  content: '';
-  position: absolute;
-  top: 15;
-  left: 0;
-  width: 80%;
-  height: 80%;
-  box-sizing: border-box;
-  border-right: 2.5px solid #212529;
-  border-bottom: 2.5px solid #212529;
-  border-radius: 0 0 100% 0;
-}
-
-.editor-cell.obstacle {
-  cursor: pointer;
-}
-
-.editor-cell.obstacle-wall {
-  background: #000000;
-}
-
-.editor-cell.obstacle-air {
-  background: linear-gradient(135deg, rgba(135, 206, 250, 0.6) 0%, rgba(70, 130, 180, 0.7) 100%);
-  border: 1px solid rgba(135, 206, 250, 0.8);
-}
-
-.editor-cell.obstacle-pathway {
-  background: linear-gradient(135deg, #8b8b8b 0%, #5a5a5a 100%);
-  border: 1px solid #6b6b6b;
-}
-
 /* 預覽模式樣式 */
 .preview-mode {
   width: 100%;
@@ -396,53 +335,6 @@
   font-size: 0.7rem;
   font-weight: 600;
   border-radius: 2px;
-}
-
-.preview-cell.start {
-  background: #f0f0f0;
-}
-
-.preview-cell.obstacle-wall {
-  background: #000000;
-}
-
-.preview-cell.obstacle-air {
-  background: linear-gradient(135deg, rgba(135, 206, 250, 0.6) 0%, rgba(70, 130, 180, 0.7) 100%);
-}
-
-.preview-cell.obstacle-pathway {
-  background: linear-gradient(135deg, #8b8b8b 0%, #5a5a5a 100%);
-}
-
-.preview-cell.door-block {
-  background: #f8f9fa;
-  border: 1px solid #dee2e6;
-  font-size: 0;
-  position: relative;
-  overflow: visible;
-}
-.preview-cell.door-block::before {
-  content: '';
-  position: absolute;
-  top: 6%;
-  left: 0;
-  width: 100%;
-  height: 2.5px;
-  min-height: 2px;
-  background: #212529;
-  box-sizing: border-box;
-}
-.preview-cell.door-block::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  box-sizing: border-box;
-  border-right: 2.5px solid #212529;
-  border-bottom: 2.5px solid #212529;
-  border-radius: 0 0 100% 0;
 }
 
 .preview-cell.farthest {

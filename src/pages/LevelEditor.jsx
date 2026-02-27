@@ -19,6 +19,25 @@ function LevelEditor() {
   const [previewMode, setPreviewMode] = useState(false)
   const [previewData, setPreviewData] = useState(null)
 
+  // 判斷指定障礙物清單中的牆壁
+  const isWallObstacle = (x, y, obstacleList = obstacles) => {
+    if (x < 0 || y < 0 || x >= gridSize || y >= gridSize) return false
+    const obstacle = obstacleList.find(obs => obs.x === x && obs.y === y)
+    return obstacle?.type === 'wall'
+  }
+
+  // 依據相鄰牆壁決定門方向（左右牆 = 垂直門；上下牆 = 水平門）
+  const getDoorDirectionClass = (x, y, obstacleList = obstacles) => {
+    const hasTopWall = isWallObstacle(x, y - 1, obstacleList)
+    const hasBottomWall = isWallObstacle(x, y + 1, obstacleList)
+    const hasLeftWall = isWallObstacle(x - 1, y, obstacleList)
+    const hasRightWall = isWallObstacle(x + 1, y, obstacleList)
+
+    if (hasLeftWall && hasRightWall) return 'door-vertical'
+    if (hasTopWall && hasBottomWall) return 'door-horizontal'
+    return 'door-horizontal'
+  }
+
   // 初始化空網格（僅在沒有導入關卡時）
   useEffect(() => {
     if (!importedLevel) {
@@ -331,7 +350,9 @@ function LevelEditor() {
                     if (isStart) cellClass += ' start'
                     else if (isObstacle) {
                       cellClass += ` obstacle obstacle-${obstacle.type}`
-                    } else if (isDoorBlock) cellClass += ' door-block'
+                    } else if (isDoorBlock) {
+                      cellClass += ` door-block ${getDoorDirectionClass(x, y, previewData.obstacles)}`
+                    }
                     else if (isFarthest) cellClass += ' farthest'
                     else if (distance !== Infinity) cellClass += ' reachable'
 
@@ -363,7 +384,7 @@ function LevelEditor() {
                   else if (cellInfo.type === 'obstacle') {
                     cellClass += ` obstacle obstacle-${cellInfo.subtype}`
                   } else if (cellInfo.type === 'door-block') {
-                    cellClass += ' door-block'
+                    cellClass += ` door-block ${getDoorDirectionClass(x, y)}`
                   }
 
                   return (

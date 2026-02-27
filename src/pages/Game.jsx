@@ -168,7 +168,7 @@ function Game() {
           <button className="back-button" onClick={handleBackToHome}>
             ← 返回首頁
           </button>
-          <h1 className="app-title">最遠點猜測遊戲</h1>
+          {/* <h6 className="app-title">最遠點猜測遊戲</h6> */}
           {gameMode === 'preset' && presetLevel && (
             <div className="level-info">關卡: {presetLevel.name}</div>
           )}

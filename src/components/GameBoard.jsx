@@ -17,6 +17,13 @@ const GameBoard = ({
     return obstacles && obstacles.some(obs => obs.x === x && obs.y === y)
   }
 
+  // 檢查是否為牆壁障礙物
+  const isWallObstacle = (x, y) => {
+    if (x < 0 || y < 0 || x >= gridSize || y >= gridSize) return false
+    if (!isObstacle(x, y)) return false
+    return getObstacleType(x, y) === 'wall'
+  }
+
   // 獲取障礙物類型
   const getObstacleType = (x, y) => {
     const obstacle = obstacles && obstacles.find(obs => obs.x === x && obs.y === y)
@@ -26,6 +33,20 @@ const GameBoard = ({
   // 檢查是否為 door block
   const isDoorBlock = (x, y) => {
     return doorBlocks && doorBlocks.some(db => db.x === x && db.y === y)
+  }
+
+  // 依據相鄰牆壁決定門方向
+  const getDoorDirectionClass = (x, y) => {
+    const hasTopWall = isWallObstacle(x, y - 1)
+    const hasBottomWall = isWallObstacle(x, y + 1)
+    const hasLeftWall = isWallObstacle(x - 1, y)
+    const hasRightWall = isWallObstacle(x + 1, y)
+
+    if (hasLeftWall && hasRightWall) return 'door-vertical'
+    if (hasTopWall && hasBottomWall) return 'door-horizontal'
+
+    // 無明確配對時維持既有顯示（水平）
+    return 'door-horizontal'
   }
 
   // 檢查是否為起點
@@ -83,7 +104,7 @@ const GameBoard = ({
       const obstacleType = getObstacleType(x, y)
       return classes + ` obstacle obstacle-${obstacleType}`
     }
-    if (isDoorBlock(x, y)) return classes + ' door-block'
+    if (isDoorBlock(x, y)) return classes + ` door-block ${getDoorDirectionClass(x, y)}`
     if (isStartPoint(x, y)) return classes + ' start-point'
     if (gameStatus !== 'playing' && gameStatus !== 'waiting' && isFarthestPoint(x, y)) return classes + ' farthest-point'
     

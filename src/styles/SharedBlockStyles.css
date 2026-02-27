@@ -1,0 +1,224 @@
+/* Shared block styles for game board and level editor */
+
+/* Exit / start tiles */
+.cell.start-point,
+.editor-cell.exit,
+.preview-cell.start {
+  background: #f0f0f0;
+}
+
+.cell.start-point {
+  padding: 2px;
+  cursor: default;
+}
+
+.cell.start-point:hover {
+  transform: none;
+}
+
+.editor-cell.exit {
+  padding: 2px;
+}
+
+.cell.start-point .cell-exit-sign,
+.editor-cell.exit .editor-exit-sign,
+.preview-cell.start .editor-exit-sign {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Door block (shared) */
+.cell.door-block,
+.editor-cell.door-block,
+.preview-cell.door-block {
+  --door-bg: #f8f9fa;
+  --door-border: 1px solid #dee2e6;
+  --door-line-color: #212529;
+  --door-size: 80%;
+  --door-offset: 10%;
+  --door-line-width: 2.5px;
+  --door-line-min-width: 2px;
+  background: var(--door-bg);
+  border: var(--door-border);
+  font-size: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.cell.door-block {
+  cursor: not-allowed;
+}
+
+.editor-cell.door-block {
+  cursor: pointer;
+  --door-bg: #f1f1f1;
+  --door-border: none;
+}
+
+.preview-cell.door-block {
+  --door-bg: #f8f9fa;
+  --door-border: 1px solid #dee2e6;
+}
+
+.cell.door-block::before,
+.editor-cell.door-block::before,
+.preview-cell.door-block::before {
+  content: '';
+  position: absolute;
+  top: 8%;
+  left: 0;
+  width: var(--door-size);
+  height: var(--door-line-width);
+  min-height: var(--door-line-min-width);
+  background: var(--door-line-color);
+  box-sizing: border-box;
+}
+
+.cell.door-block::after,
+.editor-cell.door-block::after,
+.preview-cell.door-block::after {
+  content: '';
+  position: absolute;
+  top: 10%;
+  left: 0;
+  width: var(--door-size);
+  height: var(--door-size);
+  box-sizing: border-box;
+  border-right: var(--door-line-width) solid var(--door-line-color);
+  border-bottom: var(--door-line-width) solid var(--door-line-color);
+  border-radius: 0 0 100% 0;
+}
+
+.cell.door-block.door-horizontal::before,
+.cell.door-block.door-horizontal::after,
+.editor-cell.door-block.door-horizontal::before,
+.editor-cell.door-block.door-horizontal::after,
+.preview-cell.door-block.door-horizontal::before,
+.preview-cell.door-block.door-horizontal::after {
+  transform: none;
+}
+
+.cell.door-block.door-vertical::before,
+.editor-cell.door-block.door-vertical::before,
+.preview-cell.door-block.door-vertical::before {
+  top: 0;
+  left: auto;
+  right: var(--door-offset);
+  width: var(--door-line-width);
+  min-width: var(--door-line-min-width);
+  height: var(--door-size);
+}
+
+.cell.door-block.door-vertical::after,
+.editor-cell.door-block.door-vertical::after,
+.preview-cell.door-block.door-vertical::after {
+  top: 0;
+  left: var(--door-offset);
+  width: var(--door-size);
+  height: var(--door-size);
+  border-right: none;
+  border-bottom: var(--door-line-width) solid var(--door-line-color);
+  border-left: var(--door-line-width) solid var(--door-line-color);
+  border-radius: 0 0 0 100%;
+}
+
+.cell.door-block:hover {
+  transform: none;
+  background: #f1f3f5;
+  box-shadow: inset 0 0 0 1px #ced4da;
+}
+
+/* Obstacle tiles (base) */
+.cell.obstacle {
+  cursor: not-allowed;
+}
+
+.editor-cell.obstacle {
+  cursor: pointer;
+}
+
+.cell.obstacle-wall,
+.editor-cell.obstacle-wall,
+.preview-cell.obstacle-wall {
+  background: #000000;
+}
+
+.cell.obstacle-wall:hover {
+  transform: none;
+  background: #000000;
+}
+
+.cell.obstacle-air,
+.editor-cell.obstacle-air,
+.preview-cell.obstacle-air {
+  background: linear-gradient(135deg, rgba(135, 206, 250, 0.6) 0%, rgba(70, 130, 180, 0.7) 100%);
+  border: 1px solid rgba(135, 206, 250, 0.8);
+}
+
+.cell.obstacle-air {
+  position: relative;
+}
+
+.cell.obstacle-air::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.1) 2px,
+    rgba(255, 255, 255, 0.1) 4px
+  );
+}
+
+.cell.obstacle-air:hover {
+  transform: none;
+  background: linear-gradient(135deg, rgba(135, 206, 250, 0.7) 0%, rgba(70, 130, 180, 0.8) 100%);
+}
+
+.cell.obstacle-pathway,
+.editor-cell.obstacle-pathway,
+.preview-cell.obstacle-pathway {
+  background: linear-gradient(135deg, #8b8b8b 0%, #5a5a5a 100%);
+  border: 1px solid #6b6b6b;
+}
+
+.cell.obstacle-pathway {
+  position: relative;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.cell.obstacle-pathway::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 1px,
+      rgba(0, 0, 0, 0.1) 1px,
+      rgba(0, 0, 0, 0.1) 2px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 1px,
+      rgba(0, 0, 0, 0.1) 1px,
+      rgba(0, 0, 0, 0.1) 2px
+    );
+}
+
+.cell.obstacle-pathway:hover {
+  transform: none;
+  background: linear-gradient(135deg, #9b9b9b 0%, #6a6a6a 100%);
+}
