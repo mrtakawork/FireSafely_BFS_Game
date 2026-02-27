@@ -53,6 +53,15 @@
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
+.game-info-wrapper {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.game-info-wrapper .game-info {
+  margin-bottom: 0;
+}
+
 .level-info {
   padding: 8px 16px;
   background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);

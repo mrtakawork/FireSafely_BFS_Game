@@ -173,16 +173,18 @@ function Game() {
             <div className="level-info">關卡: {presetLevel.name}</div>
           )}
         </div>
-        <GameConfig
-          gridSize={gridSize}
-          exitCount={exitCount}
-          obstaclePercentage={obstaclePercentage}
-          maxAttempts={maxAttempts}
-          onlyWallObstacles={onlyWallObstacles}
-          onConfigChange={handleConfigChange}
-          gameMode={gameMode}
-          gameStatus={gameStatus}
-        />
+        {gameMode === 'random' && (
+          <GameConfig
+            gridSize={gridSize}
+            exitCount={exitCount}
+            obstaclePercentage={obstaclePercentage}
+            maxAttempts={maxAttempts}
+            onlyWallObstacles={onlyWallObstacles}
+            onConfigChange={handleConfigChange}
+            gameMode={gameMode}
+            gameStatus={gameStatus}
+          />
+        )}
         <GameInfo
           gameStatus={gameStatus}
           attempts={attempts}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import './GameConfig.css'
 
 const GameConfig = ({
@@ -16,7 +16,18 @@ const GameConfig = ({
   const [localObstaclePercentage, setLocalObstaclePercentage] = useState(obstaclePercentage)
   const [localMaxAttempts, setLocalMaxAttempts] = useState(maxAttempts)
   const [localOnlyWallObstacles, setLocalOnlyWallObstacles] = useState(onlyWallObstacles)
-  const [isExpanded, setIsExpanded] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+  const containerRef = useRef(null)
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (containerRef.current && !containerRef.current.contains(e.target)) {
+        setIsOpen(false)
+      }
+    }
+    if (isOpen) document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [isOpen])
 
   const handleApply = () => {
     onConfigChange({
@@ -26,6 +37,7 @@ const GameConfig = ({
       maxAttempts: localMaxAttempts,
       onlyWallObstacles: localOnlyWallObstacles
     })
+    setIsOpen(false)
   }
 
   const handleReset = () => {
@@ -43,175 +55,179 @@ const GameConfig = ({
     })
   }
 
-  // const isDisabled = gameStatus === 'playing' || gameMode === 'preset'
   const isDisabled = gameStatus === 'playing'
 
   return (
-    <div className={`game-config ${isExpanded ? 'expanded' : 'collapsed'}`}>
-      <h3 className="config-title" onClick={() => setIsExpanded(!isExpanded)}>
-        <span>遊戲配置</span>
-        <span className={`config-toggle-icon ${isExpanded ? 'open' : ''}`}>▶</span>
-      </h3>
-      
-      <div className="config-body">
-      <div className="config-group">
-        <label htmlFor="config-grid-size">
-          網格大小：
-          <span className="config-value">{localGridSize}x{localGridSize}</span>
-        </label>
-        <input
-          type="range"
-          id="config-grid-size"
-          min="5"
-          max="30"
-          value={localGridSize}
-          onChange={(e) => setLocalGridSize(Number(e.target.value))}
-          disabled={isDisabled}
-          className="config-slider"
-        />
-        <div className="config-presets">
-          {[5, 8, 10, 12, 15, 20, 25, 30].map(size => (
-            <button
-              key={size}
-              className={`config-preset-btn ${localGridSize === size ? 'active' : ''}`}
-              onClick={() => setLocalGridSize(size)}
-              disabled={isDisabled}
-            >
-              {size}
-            </button>
-          ))}
-        </div>
-      </div>
+    <div className="game-config" ref={containerRef}>
+      <button
+        className={`config-gear-btn ${isOpen ? 'active' : ''}`}
+        onClick={() => setIsOpen(!isOpen)}
+        title="遊戲配置"
+      >
+        ⚙
+      </button>
 
-      <div className="config-group">
-        <label htmlFor="config-exit-count">
-          Exit 數量：
-          <span className="config-value">
-            {localExitCount === null ? '自動' : localExitCount}
-          </span>
-        </label>
-        <div className="config-radio-group">
-          <label>
+      {isOpen && (
+        <div className="config-panel">
+          <div className="config-panel-header">遊戲配置</div>
+
+          <div className="config-group">
+            <label htmlFor="config-grid-size">
+              網格大小：
+              <span className="config-value">{localGridSize}x{localGridSize}</span>
+            </label>
             <input
-              type="radio"
-              name="exit-count"
-              checked={localExitCount === null}
-              onChange={() => setLocalExitCount(null)}
+              type="range"
+              id="config-grid-size"
+              min="5"
+              max="30"
+              value={localGridSize}
+              onChange={(e) => setLocalGridSize(Number(e.target.value))}
               disabled={isDisabled}
+              className="config-slider"
             />
-            自動 (2-4個)
-          </label>
-          {[1, 2, 3, 4, 5, 6].map(count => (
-            <label key={count}>
+            <div className="config-presets">
+              {[5, 8, 10, 12, 15, 20, 25, 30].map(size => (
+                <button
+                  key={size}
+                  className={`config-preset-btn ${localGridSize === size ? 'active' : ''}`}
+                  onClick={() => setLocalGridSize(size)}
+                  disabled={isDisabled}
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="config-group">
+            <label htmlFor="config-exit-count">
+              Exit 數量：
+              <span className="config-value">
+                {localExitCount === null ? '自動' : localExitCount}
+              </span>
+            </label>
+            <div className="config-radio-group">
+              <label>
+                <input
+                  type="radio"
+                  name="exit-count"
+                  checked={localExitCount === null}
+                  onChange={() => setLocalExitCount(null)}
+                  disabled={isDisabled}
+                />
+                自動 (2-4個)
+              </label>
+              {[1, 2, 3, 4, 5, 6].map(count => (
+                <label key={count}>
+                  <input
+                    type="radio"
+                    name="exit-count"
+                    checked={localExitCount === count}
+                    onChange={() => setLocalExitCount(count)}
+                    disabled={isDisabled}
+                  />
+                  {count} 個
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div className="config-group">
+            <label htmlFor="config-obstacle">
+              障礙物比例：
+              <span className="config-value">{localObstaclePercentage}%</span>
+            </label>
+            <input
+              type="range"
+              id="config-obstacle"
+              min="0"
+              max="30"
+              step="5"
+              value={localObstaclePercentage}
+              onChange={(e) => setLocalObstaclePercentage(Number(e.target.value))}
+              disabled={isDisabled}
+              className="config-slider"
+            />
+            <div className="config-presets">
+              {[0, 5, 10, 15, 20, 25, 30].map(percent => (
+                <button
+                  key={percent}
+                  className={`config-preset-btn ${localObstaclePercentage === percent ? 'active' : ''}`}
+                  onClick={() => setLocalObstaclePercentage(percent)}
+                  disabled={isDisabled}
+                >
+                  {percent}%
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="config-group">
+            <label htmlFor="config-only-wall">
               <input
-                type="radio"
-                name="exit-count"
-                checked={localExitCount === count}
-                onChange={() => setLocalExitCount(count)}
+                type="checkbox"
+                id="config-only-wall"
+                checked={localOnlyWallObstacles}
+                onChange={(e) => setLocalOnlyWallObstacles(e.target.checked)}
                 disabled={isDisabled}
               />
-              {count} 個
+              只生成牆壁障礙物（默認）
             </label>
-          ))}
-        </div>
-      </div>
+            <p className="config-hint">
+              啟用後只生成黑色牆壁，不生成空氣塊和通道塊
+            </p>
+          </div>
 
-      <div className="config-group">
-        <label htmlFor="config-obstacle">
-          障礙物比例：
-          <span className="config-value">{localObstaclePercentage}%</span>
-        </label>
-        <input
-          type="range"
-          id="config-obstacle"
-          min="0"
-          max="30"
-          step="5"
-          value={localObstaclePercentage}
-          onChange={(e) => setLocalObstaclePercentage(Number(e.target.value))}
-          disabled={isDisabled}
-          className="config-slider"
-        />
-        <div className="config-presets">
-          {[0, 5, 10, 15, 20, 25, 30].map(percent => (
+          <div className="config-group">
+            <label htmlFor="config-attempts">
+              最大嘗試次數：
+              <span className="config-value">{localMaxAttempts} 次</span>
+            </label>
+            <input
+              type="range"
+              id="config-attempts"
+              min="3"
+              max="10"
+              value={localMaxAttempts}
+              onChange={(e) => setLocalMaxAttempts(Number(e.target.value))}
+              disabled={isDisabled}
+              className="config-slider"
+            />
+            <div className="config-presets">
+              {[3, 4, 5, 6, 7, 8, 9, 10].map(att => (
+                <button
+                  key={att}
+                  className={`config-preset-btn ${localMaxAttempts === att ? 'active' : ''}`}
+                  onClick={() => setLocalMaxAttempts(att)}
+                  disabled={isDisabled}
+                >
+                  {att}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="config-actions">
             <button
-              key={percent}
-              className={`config-preset-btn ${localObstaclePercentage === percent ? 'active' : ''}`}
-              onClick={() => setLocalObstaclePercentage(percent)}
+              className="config-apply-btn"
+              onClick={handleApply}
               disabled={isDisabled}
             >
-              {percent}%
+              應用配置
             </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="config-group">
-        <label htmlFor="config-only-wall">
-          <input
-            type="checkbox"
-            id="config-only-wall"
-            checked={localOnlyWallObstacles}
-            onChange={(e) => setLocalOnlyWallObstacles(e.target.checked)}
-            disabled={isDisabled}
-          />
-          只生成牆壁障礙物（默認）
-        </label>
-        <p className="config-hint">
-          啟用此選項後，只會生成黑色牆壁障礙物，不會生成空氣塊和通道塊
-        </p>
-      </div>
-
-      <div className="config-group">
-        <label htmlFor="config-attempts">
-          最大嘗試次數：
-          <span className="config-value">{localMaxAttempts} 次</span>
-        </label>
-        <input
-          type="range"
-          id="config-attempts"
-          min="3"
-          max="10"
-          value={localMaxAttempts}
-          onChange={(e) => setLocalMaxAttempts(Number(e.target.value))}
-          disabled={isDisabled}
-          className="config-slider"
-        />
-        <div className="config-presets">
-          {[3, 4, 5, 6, 7, 8, 9, 10].map(attempts => (
             <button
-              key={attempts}
-              className={`config-preset-btn ${localMaxAttempts === attempts ? 'active' : ''}`}
-              onClick={() => setLocalMaxAttempts(attempts)}
+              className="config-reset-btn"
+              onClick={handleReset}
               disabled={isDisabled}
             >
-              {attempts}
+              重置為默認
             </button>
-          ))}
+          </div>
         </div>
-      </div>
-
-      <div className="config-actions">
-        <button
-          className="config-apply-btn"
-          onClick={handleApply}
-          disabled={isDisabled}
-        >
-          應用配置
-        </button>
-        <button
-          className="config-reset-btn"
-          onClick={handleReset}
-          disabled={isDisabled}
-        >
-          重置為默認
-        </button>
-      </div>
-      </div>
+      )}
     </div>
   )
 }
 
 export default GameConfig
-
-

@@ -69,16 +69,8 @@ function Home() {
         <p className="home-subtitle">找出距離 Exit 最遠的格子！</p>
 
         <div className="mode-selection">
-          <div className="mode-card" onClick={handleRandomMode}>
-            <div className="mode-icon">🎲</div>
-            <h2 className="mode-title">隨機生成</h2>
-            <p className="mode-description">
-              每次遊戲都會隨機生成 Exit、障礙物和網格大小，挑戰無限可能！
-            </p>
-            <button className="mode-button">開始遊戲</button>
-          </div>
 
-          <div className="mode-card">
+        <div className="mode-card">
             <div className="mode-icon">📋</div>
             <h2 className="mode-title">預設關卡</h2>
             <p className="mode-description">
@@ -98,6 +90,15 @@ function Home() {
                 </button>
               ))}
             </div>
+          </div>
+
+          <div className="mode-card" onClick={handleRandomMode}>
+            <div className="mode-icon">🎲</div>
+            <h2 className="mode-title">隨機生成</h2>
+            <p className="mode-description">
+              每次遊戲都會隨機生成 Exit、障礙物和網格大小，挑戰無限可能！
+            </p>
+            <button className="mode-button">開始遊戲</button>
           </div>
 
           <div className="mode-card">
