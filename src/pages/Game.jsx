@@ -28,17 +28,24 @@ function Game() {
   const [doorBlocks, setDoorBlocks] = useState([])
 
   // 初始化遊戲
-  const initializeGame = () => {
+  const initializeGame = (configOverrides = {}) => {
+    const nextGridSize = configOverrides.gridSize ?? gridSize
+    const nextExitCount = Object.prototype.hasOwnProperty.call(configOverrides, 'exitCount')
+      ? configOverrides.exitCount
+      : exitCount
+    const nextObstaclePercentage = configOverrides.obstaclePercentage ?? obstaclePercentage
+    const nextOnlyWallObstacles = configOverrides.onlyWallObstacles ?? onlyWallObstacles
+
     const mapData = generateMap(
-      gridSize, 
+      nextGridSize,
       gameMode, 
       presetLevel, 
-      exitCount, 
-      obstaclePercentage,
-      onlyWallObstacles
+      nextExitCount,
+      nextObstaclePercentage,
+      nextOnlyWallObstacles
     )
     
-    if (mapData.gridSize !== gridSize) {
+    if (mapData.gridSize !== nextGridSize) {
       setGridSize(mapData.gridSize)
     }
     
@@ -106,27 +113,32 @@ function Game() {
     if (gameMode === 'preset') return // 預設關卡不能改變配置
     
     let shouldReinitialize = false
+    const nextConfig = {}
     
     if (config.gridSize !== undefined) {
       const validatedSize = Math.max(3, Math.min(30, Math.floor(config.gridSize)))
       if (validatedSize !== gridSize) {
         setGridSize(validatedSize)
+        nextConfig.gridSize = validatedSize
         shouldReinitialize = true
       }
     }
     
     if (config.exitCount !== undefined && config.exitCount !== exitCount) {
       setExitCount(config.exitCount)
+      nextConfig.exitCount = config.exitCount
       shouldReinitialize = true
     }
     
     if (config.obstaclePercentage !== undefined && config.obstaclePercentage !== obstaclePercentage) {
       setObstaclePercentage(config.obstaclePercentage)
+      nextConfig.obstaclePercentage = config.obstaclePercentage
       shouldReinitialize = true
     }
     
     if (config.onlyWallObstacles !== undefined && config.onlyWallObstacles !== onlyWallObstacles) {
       setOnlyWallObstacles(config.onlyWallObstacles)
+      nextConfig.onlyWallObstacles = config.onlyWallObstacles
       shouldReinitialize = true
     }
     
@@ -136,7 +148,7 @@ function Game() {
     }
     
     if (shouldReinitialize) {
-      initializeGame()
+      initializeGame(nextConfig)
     }
   }
 

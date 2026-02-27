@@ -9,8 +9,45 @@
   color: #333;
   font-size: 1.3rem;
   font-weight: 700;
-  margin-bottom: 20px;
+  margin-bottom: 0;
   text-align: center;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  user-select: none;
+  padding: 4px 0;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.config-title:hover {
+  background: rgba(102, 126, 234, 0.08);
+}
+
+.config-toggle-icon {
+  font-size: 0.8rem;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.config-toggle-icon.open {
+  transform: rotate(90deg);
+}
+
+.config-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.3s ease, margin-top 0.3s ease;
+  opacity: 0;
+  margin-top: 0;
+}
+
+.game-config.expanded .config-body {
+  max-height: 1200px;
+  opacity: 1;
+  margin-top: 20px;
 }
 
 .config-group {
@@ -214,16 +251,82 @@
 
 @media (max-width: 768px) {
   .game-config {
-    padding: 15px;
+    padding: 12px;
   }
-  
+
+  .game-config.expanded .config-body {
+    margin-top: 12px;
+  }
+
+  .config-group {
+    margin-bottom: 14px;
+  }
+
+  .config-group label {
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+  }
+
+  .config-slider {
+    margin-bottom: 6px;
+  }
+
+  .config-presets {
+    gap: 6px;
+    margin-top: 6px;
+  }
+
+  .config-preset-btn {
+    padding: 4px 10px;
+    font-size: 0.85rem;
+    min-height: 32px;
+  }
+
   .config-radio-group {
-    flex-direction: column;
-    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px 10px;
+    margin-top: 6px;
   }
-  
+
+  .config-radio-group label {
+    font-size: 0.9rem;
+    gap: 4px;
+  }
+
+  .config-radio-group label:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .config-radio-group input[type="radio"] {
+    width: 16px;
+    height: 16px;
+  }
+
+  .config-group input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+  }
+
+  .config-hint {
+    margin-left: 0;
+    margin-top: 4px;
+    font-size: 0.8rem;
+    line-height: 1.3;
+  }
+
   .config-actions {
     flex-direction: column;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 12px;
+  }
+
+  .config-apply-btn,
+  .config-reset-btn {
+    padding: 10px 14px;
+    font-size: 0.92rem;
   }
 }
 

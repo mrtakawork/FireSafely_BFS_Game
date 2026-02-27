@@ -16,6 +16,7 @@ const GameConfig = ({
   const [localObstaclePercentage, setLocalObstaclePercentage] = useState(obstaclePercentage)
   const [localMaxAttempts, setLocalMaxAttempts] = useState(maxAttempts)
   const [localOnlyWallObstacles, setLocalOnlyWallObstacles] = useState(onlyWallObstacles)
+  const [isExpanded, setIsExpanded] = useState(false)
 
   const handleApply = () => {
     onConfigChange({
@@ -46,9 +47,13 @@ const GameConfig = ({
   const isDisabled = gameStatus === 'playing'
 
   return (
-    <div className="game-config">
-      <h3 className="config-title">遊戲配置</h3>
+    <div className={`game-config ${isExpanded ? 'expanded' : 'collapsed'}`}>
+      <h3 className="config-title" onClick={() => setIsExpanded(!isExpanded)}>
+        <span>遊戲配置</span>
+        <span className={`config-toggle-icon ${isExpanded ? 'open' : ''}`}>▶</span>
+      </h3>
       
+      <div className="config-body">
       <div className="config-group">
         <label htmlFor="config-grid-size">
           網格大小：
@@ -201,6 +206,7 @@ const GameConfig = ({
         >
           重置為默認
         </button>
+      </div>
       </div>
     </div>
   )
