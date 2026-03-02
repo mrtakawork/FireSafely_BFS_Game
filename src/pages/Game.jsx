@@ -4,7 +4,6 @@ import GameBoard from '../components/GameBoard'
 import GameInfo from '../components/GameInfo'
 import GameConfig from '../components/GameConfig'
 import { generateMap, calculateDistanceToNearestStartForPoint, checkIsObstacle, checkIsDoorBlock } from '../components/MapGenerator'
-import '../App.css'
 
 function Game() {
   const location = useLocation()
@@ -194,15 +193,20 @@ function Game() {
   }, [timeLimit, timeRemaining, gameStatus])
 
   return (
-    <div className="app">
-      <div className="app-container">
-        <div className="game-header">
-          <button className="back-button" onClick={handleBackToHome}>
+    <div className="w-full min-h-screen flex justify-center items-center">
+      <div className="bg-white rounded-[20px] p-6 md:p-8 shadow-card w-full max-w-[900px] relative z-10">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-5">
+          <button
+            type="button"
+            onClick={handleBackToHome}
+            className="py-2.5 px-5 rounded-lg text-white font-semibold text-base bg-gradient-to-br from-[#667eea] to-[#764ba2] border-none shadow-md hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 md:w-auto w-full"
+          >
             ← 返回首頁
           </button>
-          {/* <h6 className="app-title">最遠點猜測遊戲</h6> */}
           {gameMode === 'preset' && presetLevel && (
-            <div className="level-info">關卡: {presetLevel.name}</div>
+            <div className="py-2 px-4 rounded-lg text-white font-semibold text-sm bg-gradient-to-br from-[#f093fb] to-[#f5576c]">
+              關卡: {presetLevel.name}
+            </div>
           )}
         </div>
         {gameMode === 'random' && (

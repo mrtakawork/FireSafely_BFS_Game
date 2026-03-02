@@ -238,54 +238,61 @@ function LevelEditor() {
   }
 
   return (
-    <div className="level-editor">
-      <div className="editor-container">
-        <div className="editor-header">
-          <h1>關卡編輯器</h1>
-          <button className="btn-back" onClick={() => navigate('/')}>
+    <div className="min-h-screen bg-gradient-to-br from-[#667eea] to-[#764ba2] p-5 pb-[120px]">
+      <div className="max-w-[1400px] mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+        <div className="flex flex-wrap justify-between items-center gap-4 px-6 py-5 bg-gradient-to-br from-[#667eea] to-[#764ba2] text-white">
+          <h1 className="m-0 text-2xl font-bold">關卡編輯器</h1>
+          <button
+            type="button"
+            onClick={() => navigate('/')}
+            className="py-2.5 px-5 rounded-lg bg-white/20 border-2 border-white text-white font-medium cursor-pointer text-base transition-all duration-300 hover:bg-white/30 hover:-translate-y-0.5"
+          >
             返回首頁
           </button>
         </div>
 
-        <div className="editor-content">
-          <div className="editor-sidebar">
-            <div className="editor-section">
-              <h3>網格設置</h3>
-              <div className="form-group">
-                <label>網格大小:</label>
+        <div className="flex flex-col lg:flex-row gap-5 p-5">
+          <div className="w-full lg:w-[300px] flex flex-col gap-5">
+            <div className="bg-gray-50 p-5 rounded-lg border border-gray-200">
+              <h3 className="m-0 mb-4 text-gray-800 text-lg font-semibold">網格設置</h3>
+              <div className="mb-4">
+                <label className="block mb-1 text-gray-600 font-medium">網格大小:</label>
                 <input
                   type="number"
                   min="3"
                   max="30"
                   value={gridSize}
                   onChange={(e) => setGridSize(Math.max(3, Math.min(30, parseInt(e.target.value) || 10)))}
+                  className="w-full py-2 px-3 border-2 border-gray-200 rounded-md text-base focus:outline-none focus:border-[#667eea] transition-colors"
                 />
               </div>
             </div>
 
-            <div className="editor-section">
-              <h3>關卡信息</h3>
-              <div className="form-group">
-                <label>關卡名稱:</label>
+            <div className="bg-gray-50 p-5 rounded-lg border border-gray-200">
+              <h3 className="m-0 mb-4 text-gray-800 text-lg font-semibold">關卡信息</h3>
+              <div className="mb-4">
+                <label className="block mb-1 text-gray-600 font-medium">關卡名稱:</label>
                 <input
                   type="text"
                   placeholder="輸入關卡名稱"
                   value={levelName}
                   onChange={(e) => setLevelName(e.target.value)}
+                  className="w-full py-2 px-3 border-2 border-gray-200 rounded-md text-base focus:outline-none focus:border-[#667eea] transition-colors"
                 />
               </div>
-              <div className="form-group">
-                <label>難度 (1-10):</label>
+              <div className="mb-4">
+                <label className="block mb-1 text-gray-600 font-medium">難度 (1-10):</label>
                 <input
                   type="number"
                   min={1}
                   max={10}
                   value={difficulty}
                   onChange={(e) => setDifficulty(Math.max(1, Math.min(10, parseInt(e.target.value, 10) || 1)))}
+                  className="w-full py-2 px-3 border-2 border-gray-200 rounded-md text-base focus:outline-none focus:border-[#667eea] transition-colors"
                 />
               </div>
-              <div className="form-group">
-                <label>時間限制 (秒):</label>
+              <div className="mb-0">
+                <label className="block mb-1 text-gray-600 font-medium">時間限制 (秒):</label>
                 <input
                   type="number"
                   min={1}
@@ -297,51 +304,52 @@ function LevelEditor() {
                     const n = raw === '' ? null : parseInt(raw, 10)
                     setTimeLimit(n != null && !isNaN(n) && n >= 1 ? n : null)
                   }}
+                  className="w-full py-2 px-3 border-2 border-gray-200 rounded-md text-base focus:outline-none focus:border-[#667eea] transition-colors"
                 />
               </div>
             </div>
 
-            <div className="editor-section">
-              <h3>統計信息</h3>
-              <div className="stats">
-                <div>Exit 數量: {startPoints.length}</div>
-                <div>障礙物數量: {obstacles.length}</div>
-                <div>門方塊數量: {doorBlocks.length}</div>
-                <div>網格大小: {gridSize}x{gridSize}</div>
+            <div className="bg-gray-50 p-5 rounded-lg border border-gray-200">
+              <h3 className="m-0 mb-4 text-gray-800 text-lg font-semibold">統計信息</h3>
+              <div className="flex flex-col gap-2 text-gray-600">
+                <div className="py-2 px-3 bg-white rounded-md border border-gray-200">Exit 數量: {startPoints.length}</div>
+                <div className="py-2 px-3 bg-white rounded-md border border-gray-200">障礙物數量: {obstacles.length}</div>
+                <div className="py-2 px-3 bg-white rounded-md border border-gray-200">門方塊數量: {doorBlocks.length}</div>
+                <div className="py-2 px-3 bg-white rounded-md border border-gray-200">網格大小: {gridSize}x{gridSize}</div>
               </div>
             </div>
           </div>
 
-          <div className="editor-main">
-            <div className="editor-toolbar">
-              <h3>操作</h3>
-              <div className="action-buttons">
-                <button className="btn-preview" onClick={handlePreview}>
+          <div className="flex-1 flex flex-col gap-4">
+            <div className="flex flex-wrap items-center gap-4 py-4 px-5 bg-gray-50 rounded-lg border border-gray-200">
+              <h3 className="m-0 text-gray-800 text-base font-semibold whitespace-nowrap">操作</h3>
+              <div className="flex flex-wrap gap-2.5">
+                <button type="button" onClick={handlePreview} className="py-3 px-4 rounded-lg border-none cursor-pointer text-base font-semibold text-white bg-gradient-to-br from-[#84fab0] to-[#8fd3f4] hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300">
                   👁️ 預覽
                 </button>
-                <button className="btn-save" onClick={handleSave}>
+                <button type="button" onClick={handleSave} className="py-3 px-4 rounded-lg border-none cursor-pointer text-base font-semibold text-white bg-gradient-to-br from-[#667eea] to-[#764ba2] hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300">
                   💾 保存
                 </button>
-                <button className="btn-export" onClick={handleExport}>
+                <button type="button" onClick={handleExport} className="py-3 px-4 rounded-lg border-none cursor-pointer text-base font-semibold text-white bg-gradient-to-br from-[#f093fb] to-[#f5576c] hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300">
                   📥 導出 JSON
                 </button>
-                <button className="btn-clear" onClick={handleClear}>
+                <button type="button" onClick={handleClear} className="py-3 px-4 rounded-lg border-none cursor-pointer text-base font-semibold text-white bg-red-400 hover:bg-red-500 hover:-translate-y-0.5 transition-all duration-300">
                   🗑️ 清除
                 </button>
               </div>
             </div>
-            <div className="editor-board">
+            <div className="flex-1 flex justify-center items-start p-5 bg-gray-50 rounded-lg overflow-auto">
             {previewMode && previewData ? (
-              <div className="preview-mode">
-                <div className="preview-header">
-                  <h2>預覽模式</h2>
-                  <button className="btn-exit-preview" onClick={handleExitPreview}>
+              <div className="w-full">
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="m-0 text-gray-800">預覽模式</h2>
+                  <button type="button" onClick={handleExitPreview} className="py-2 px-4 rounded-md bg-red-400 text-white border-none cursor-pointer text-sm font-medium hover:bg-red-500 hover:-translate-y-0.5 transition-all duration-300">
                     退出預覽
                   </button>
                 </div>
-                <div className="preview-info">
-                  <p>最遠點數量: {previewData.farthestPoints.length}</p>
-                  <p>最大距離: {Math.max(...Object.values(previewData.allCellDistances).filter(d => d !== Infinity))}</p>
+                <div className="mb-4 p-2.5 bg-white rounded-md border border-gray-200">
+                  <p className="my-1 text-gray-600">最遠點數量: {previewData.farthestPoints.length}</p>
+                  <p className="my-1 text-gray-600">最大距離: {Math.max(...Object.values(previewData.allCellDistances).filter(d => d !== Infinity))}</p>
                 </div>
                 <div 
                   className="preview-grid"
@@ -429,53 +437,60 @@ function LevelEditor() {
 
       {/* 浮動底部工具列 */}
       {!previewMode && (
-        <div className="editor-tools-floating-bar">
-          <div className="floating-bar-content">
-            <h3 className="floating-bar-title">編輯工具</h3>
-            <div className="tool-buttons-row">
+        <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-[1000] bg-white rounded-2xl shadow-xl py-4 px-6 border-2 border-[#667eea]/30">
+          <div className="flex flex-wrap items-center gap-5">
+            <h3 className="m-0 text-lg text-gray-800 font-semibold">編輯工具</h3>
+            <div className="flex flex-wrap gap-2.5">
               <button
-                className={`tool-btn ${cellType === 'exit' ? 'active' : ''}`}
+                type="button"
+                className={`py-2.5 px-4 rounded-lg border-2 text-base font-medium cursor-pointer transition-all duration-300 ${cellType === 'exit' ? 'bg-gradient-to-br from-[#667eea] to-[#764ba2] text-white border-[#764ba2]' : 'bg-white border-gray-200 hover:border-[#667eea] hover:-translate-y-0.5'}`}
                 onClick={() => setCellType('exit')}
               >
                 🚪 Exit
               </button>
               <button
-                className={`tool-btn ${cellType === 'obstacle' ? 'active' : ''}`}
+                type="button"
+                className={`py-2.5 px-4 rounded-lg border-2 text-base font-medium cursor-pointer transition-all duration-300 ${cellType === 'obstacle' ? 'bg-gradient-to-br from-[#667eea] to-[#764ba2] text-white border-[#764ba2]' : 'bg-white border-gray-200 hover:border-[#667eea] hover:-translate-y-0.5'}`}
                 onClick={() => setCellType('obstacle')}
               >
                 🧱 障礙物
               </button>
               <button
-                className={`tool-btn ${cellType === 'door-block' ? 'active' : ''}`}
+                type="button"
+                className={`py-2.5 px-4 rounded-lg border-2 text-base font-medium cursor-pointer transition-all duration-300 ${cellType === 'door-block' ? 'bg-gradient-to-br from-[#667eea] to-[#764ba2] text-white border-[#764ba2]' : 'bg-white border-gray-200 hover:border-[#667eea] hover:-translate-y-0.5'}`}
                 onClick={() => setCellType('door-block')}
               >
                 🚪 門方塊
               </button>
               <button
-                className={`tool-btn ${cellType === 'empty' ? 'active' : ''}`}
+                type="button"
+                className={`py-2.5 px-4 rounded-lg border-2 text-base font-medium cursor-pointer transition-all duration-300 ${cellType === 'empty' ? 'bg-gradient-to-br from-[#667eea] to-[#764ba2] text-white border-[#764ba2]' : 'bg-white border-gray-200 hover:border-[#667eea] hover:-translate-y-0.5'}`}
                 onClick={() => setCellType('empty')}
               >
                 🧽 橡皮擦
               </button>
             </div>
             {cellType === 'obstacle' && (
-              <div className="obstacle-type-selector-inline">
-                <span className="type-label">障礙物類型:</span>
-                <div className="type-buttons-inline">
+              <div className="flex items-center gap-2.5 pl-4 border-l-2 border-gray-200">
+                <span className="text-gray-600 font-medium text-sm">障礙物類型:</span>
+                <div className="flex gap-2">
                   <button
-                    className={`type-btn ${obstacleType === 'wall' ? 'active' : ''}`}
+                    type="button"
+                    className={`py-2 px-3.5 rounded-md text-sm border-2 cursor-pointer transition-all ${obstacleType === 'wall' ? 'bg-[#667eea] text-white border-[#667eea]' : 'bg-white border-gray-200 text-gray-700 hover:border-[#667eea]'}`}
                     onClick={() => setObstacleType('wall')}
                   >
                     牆壁
                   </button>
                   <button
-                    className={`type-btn ${obstacleType === 'air' ? 'active' : ''}`}
+                    type="button"
+                    className={`py-2 px-3.5 rounded-md text-sm border-2 cursor-pointer transition-all ${obstacleType === 'air' ? 'bg-[#667eea] text-white border-[#667eea]' : 'bg-white border-gray-200 text-gray-700 hover:border-[#667eea]'}`}
                     onClick={() => setObstacleType('air')}
                   >
                     空氣塊
                   </button>
                   <button
-                    className={`type-btn ${obstacleType === 'pathway' ? 'active' : ''}`}
+                    type="button"
+                    className={`py-2 px-3.5 rounded-md text-sm border-2 cursor-pointer transition-all ${obstacleType === 'pathway' ? 'bg-[#667eea] text-white border-[#667eea]' : 'bg-white border-gray-200 text-gray-700 hover:border-[#667eea]'}`}
                     onClick={() => setObstacleType('pathway')}
                   >
                     通道塊

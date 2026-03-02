@@ -2,7 +2,6 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { presetLevels } from '../data/loadPresetLevels'
 import DifficultyStars from '../components/DifficultyStars'
-import './PresetLevels.css'
 
 function PresetLevels() {
   const navigate = useNavigate()
@@ -12,26 +11,29 @@ function PresetLevels() {
   }
 
   return (
-    <div className="preset-levels-page">
-      <div className="preset-levels-container">
-        <div className="preset-levels-header">
-          <button className="btn-back" onClick={() => navigate('/')}>
+    <div className="w-full min-h-screen p-5 flex justify-center items-start">
+      <div className="bg-white rounded-[20px] p-8 md:p-10 shadow-card w-full max-w-[600px]">
+        <div className="mb-6">
+          <button
+            onClick={() => navigate('/')}
+            className="mb-5 py-2.5 px-5 rounded-lg bg-gray-100 text-primary border-2 border-primary font-semibold text-base cursor-pointer transition-all duration-300 hover:bg-primary hover:text-white"
+          >
             返回首頁
           </button>
-          <h1 className="preset-levels-title">預設關卡</h1>
-          <p className="preset-levels-description">
+          <h1 className="text-gray-800 text-xl md:text-2xl font-bold mb-2">預設關卡</h1>
+          <p className="text-gray-500 text-base leading-relaxed">
             選擇精心設計的關卡，挑戰不同難度的謎題！
           </p>
         </div>
-        <div className="preset-levels">
+        <div className="flex flex-col gap-3">
           {presetLevels.map((level, index) => (
             <button
               key={index}
-              className="level-button"
               onClick={() => handleSelectLevel(level)}
+              className="w-full py-4 px-5 rounded-lg bg-white border-2 border-primary flex flex-col items-start text-left cursor-pointer transition-all duration-200 hover:bg-gradient-to-br hover:from-primary hover:to-primary-dark hover:text-white hover:translate-x-1 hover:shadow-md"
             >
-              <span className="level-name">{level.name}</span>
-              <span className="level-details">
+              <span className="font-semibold text-base mb-1">{level.name}</span>
+              <span className="text-sm opacity-80">
                 {level.gridSize}x{level.gridSize}
                 {typeof level.difficulty === 'number' ? (
                   <> · <DifficultyStars difficulty={level.difficulty} /></>

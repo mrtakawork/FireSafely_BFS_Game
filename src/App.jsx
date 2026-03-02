@@ -4,8 +4,6 @@ import Home from './pages/Home'
 import Game from './pages/Game'
 import LevelEditor from './pages/LevelEditor'
 import PresetLevels from './pages/PresetLevels'
-import './App.css'
-
 function App() {
   return (
     <Routes>
