@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { getSavedLevels, deleteLevel, importLevel } from '../utils/levelStorage'
+import DifficultyStars from '../components/DifficultyStars'
 import './Home.css'
 
 function Home() {
@@ -66,6 +67,9 @@ function Home() {
         <div className="mode-selection">
 
         <div className="mode-card mode-card-buttons">
+            <div className="mode-icon">📋</div>
+            <h2 className="mode-title">選擇遊戲模式</h2>
+            <p className="mode-choice-hint">請選擇下方按鈕開始遊戲</p>
             <button
               className="mode-choice-button"
               onClick={() => {}}
@@ -125,7 +129,7 @@ function Home() {
                       <span className="level-details">
                         {level.gridSize}x{level.gridSize}
                         {typeof level.difficulty === 'number' && (
-                          <> · 難度 {level.difficulty}</>
+                          <> · <DifficultyStars difficulty={level.difficulty} /></>
                         )}
                         {level.timeLimit != null ? (
                           <> · 限時 {level.timeLimit}秒</>

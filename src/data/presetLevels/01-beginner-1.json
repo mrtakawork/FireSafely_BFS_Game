@@ -1,7 +1,7 @@
 {
-  "name": "初級關卡 1",
+  "name": "01-beginner-1",
   "gridSize": 8,
-  "difficulty": "簡單",
+  "difficulty": 1,
   "timeLimit": null,
   "startPoints": [
     { "x": 1, "y": 1 },

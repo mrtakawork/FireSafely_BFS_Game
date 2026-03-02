@@ -1,0 +1,41 @@
+.difficulty-stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  font-size: 1em;
+  line-height: 1;
+}
+
+.difficulty-stars .star {
+  display: inline-block;
+  color: #f0c040;
+}
+
+.difficulty-stars .star-empty {
+  color: #ddd;
+}
+
+.difficulty-stars .star-half {
+  position: relative;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+}
+
+.difficulty-stars .star-half-bg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #ddd;
+  z-index: 0;
+}
+
+.difficulty-stars .star-half-inner {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  overflow: hidden;
+  color: #f0c040;
+  z-index: 1;
+}

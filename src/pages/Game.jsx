@@ -26,6 +26,8 @@ function Game() {
   const [allCellDistances, setAllCellDistances] = useState({})
   const [obstacles, setObstacles] = useState([])
   const [doorBlocks, setDoorBlocks] = useState([])
+  const timeLimit = presetLevel?.timeLimit != null && typeof presetLevel.timeLimit === 'number' ? presetLevel.timeLimit : null
+  const [timeRemaining, setTimeRemaining] = useState(() => (timeLimit != null ? timeLimit : null))
 
   // 初始化遊戲
   const initializeGame = (configOverrides = {}) => {
@@ -58,6 +60,11 @@ function Game() {
     setGameStatus('waiting')
     setAttempts(0)
     setScore(0)
+    if (presetLevel?.timeLimit != null) {
+      setTimeRemaining(presetLevel.timeLimit)
+    } else {
+      setTimeRemaining(null)
+    }
   }
 
   // 處理格子點擊
@@ -161,6 +168,31 @@ function Game() {
     initializeGame()
   }, [gameMode, presetLevel])
 
+  // 倒數計時：有時間限制時，一進入關卡就開始倒數（不需等點擊），到 0 即失敗
+  useEffect(() => {
+    const isActive = gameStatus === 'waiting' || gameStatus === 'playing'
+    if (!isActive || timeLimit == null || timeRemaining == null) return
+    if (timeRemaining <= 0) {
+      setGameStatus('lost')
+      return
+    }
+    const timer = setInterval(() => {
+      setTimeRemaining((prev) => {
+        if (prev == null || prev <= 1) return 0
+        return prev - 1
+      })
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [gameStatus, timeLimit, timeRemaining])
+
+  // 當剩餘時間變為 0 時結束遊戲
+  useEffect(() => {
+    const isActive = gameStatus === 'waiting' || gameStatus === 'playing'
+    if (timeLimit != null && timeRemaining === 0 && isActive) {
+      setGameStatus('lost')
+    }
+  }, [timeLimit, timeRemaining, gameStatus])
+
   return (
     <div className="app">
       <div className="app-container">
@@ -195,6 +227,8 @@ function Game() {
           onReset={resetGame}
           gridSize={gridSize}
           gameMode={gameMode}
+          timeLimit={timeLimit}
+          timeRemaining={timeRemaining}
         />
         <GameBoard
           gridSize={gridSize}

@@ -1,6 +1,8 @@
 {
-  "name": "25X Difficult01",
+  "name": "07 25X Difficult01",
   "gridSize": 25,
+  "difficulty": 7,
+  "timeLimit": 60,
   "startPoints": [
     {
       "x": 1,
@@ -1225,6 +1227,5 @@
       "y": 24,
       "type": "wall"
     }
-  ],
-  "difficulty": "自定義"
+  ]
 }

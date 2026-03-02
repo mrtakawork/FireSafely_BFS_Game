@@ -10,7 +10,9 @@ const GameInfo = ({
   farthestPoints,
   onReset,
   gridSize,
-  gameMode = 'random'
+  gameMode = 'random',
+  timeLimit = null,
+  timeRemaining = null
 }) => {
   const getStatusMessage = () => {
     switch (gameStatus) {
@@ -21,6 +23,9 @@ const GameInfo = ({
       case 'won':
         return `🎉 恭喜！你找到了最遠點！得分：${score}`
       case 'lost':
+        if (timeLimit != null && timeRemaining === 0) {
+          return '⏱️ 時間到！遊戲結束'
+        }
         const pointsText = farthestPoints && farthestPoints.length > 0
           ? farthestPoints.length === 1
             ? `(${farthestPoints[0].x}, ${farthestPoints[0].y})`
@@ -37,6 +42,14 @@ const GameInfo = ({
       <div className="info-section">
         <div className="status-message">{getStatusMessage()}</div>
         <div className="info-stats">
+          {timeLimit != null && (
+            <div className="stat-item stat-item-timer">
+              <span className="stat-label">剩餘時間：</span>
+              <span className={`stat-value ${timeRemaining !== null && timeRemaining <= 10 ? 'timer-low' : ''}`}>
+                {timeRemaining != null ? `${timeRemaining} 秒` : '—'}
+              </span>
+            </div>
+          )}
           <div className="stat-item">
             <span className="stat-label">嘗試次數：</span>
             <span className="stat-value">{attempts}/{maxAttempts}</span>

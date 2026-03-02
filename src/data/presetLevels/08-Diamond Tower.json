@@ -1,6 +1,8 @@
 {
-  "name": "30X Diamond Tower",
+  "name": "08-Diamond Tower",
   "gridSize": 30,
+  "difficulty": 8,
+  "timeLimit": 60,
   "startPoints": [
     {
       "x": 14,
@@ -1261,6 +1263,5 @@
       "y": 14,
       "type": "wall"
     }
-  ],
-  "difficulty": "自定義"
+  ]
 }

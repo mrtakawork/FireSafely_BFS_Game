@@ -50,6 +50,19 @@
   font-weight: 700;
 }
 
+.stat-item-timer .stat-value {
+  min-width: 4ch;
+}
+
+.stat-value.timer-low {
+  color: #dc3545;
+  animation: timer-pulse 1s ease-in-out infinite;
+}
+
+@keyframes timer-pulse {
+  50% { opacity: 0.8; }
+}
+
 .controls-section {
   display: flex;
   justify-content: space-between;

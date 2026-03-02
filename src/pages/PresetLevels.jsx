@@ -1,6 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { presetLevels } from '../data/loadPresetLevels'
+import DifficultyStars from '../components/DifficultyStars'
 import './PresetLevels.css'
 
 function PresetLevels() {
@@ -31,7 +32,12 @@ function PresetLevels() {
             >
               <span className="level-name">{level.name}</span>
               <span className="level-details">
-                {level.gridSize}x{level.gridSize} · {level.difficulty}
+                {level.gridSize}x{level.gridSize}
+                {typeof level.difficulty === 'number' ? (
+                  <> · <DifficultyStars difficulty={level.difficulty} /></>
+                ) : (
+                  level.difficulty != null && <> · {level.difficulty}</>
+                )}
               </span>
             </button>
           ))}

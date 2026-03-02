@@ -1,6 +1,8 @@
 {
-  "name": "Stand_Map_1",
+  "name": "06-Stand_Map_1",
   "gridSize": 30,
+  "difficulty": 6,
+  "timeLimit": 60,
   "startPoints": [
     {
       "x": 27,
@@ -874,7 +876,5 @@
       "x": 21,
       "y": 12
     }
-  ],
-  "difficulty": 5,
-  "timeLimit": null
+  ]
 }
