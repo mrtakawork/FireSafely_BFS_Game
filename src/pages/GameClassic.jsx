@@ -18,14 +18,31 @@ function getNumericDifficulty(level) {
   return 5
 }
 
-// Pick 8 random levels and sort by difficulty (easiest first)
+// Pick 8 random levels; respect classic_mode: "ignore" (exclude), "must_on_end" (must be last)
 function pickClassicLevels() {
-  const pool = [...presetLevels]
-  if (pool.length === 0) return []
-  const count = Math.min(CLASSIC_LEVEL_COUNT, pool.length)
-  const shuffled = pool.sort(() => Math.random() - 0.5)
-  const selected = shuffled.slice(0, count)
-  return selected.sort((a, b) => getNumericDifficulty(a) - getNumericDifficulty(b))
+  const eligible = presetLevels.filter((l) => l.classic_mode !== 'ignore')
+  if (eligible.length === 0) return []
+
+  const mustOnEndPool = eligible.filter((l) => l.classic_mode === 'must_on_end')
+  const otherPool = eligible.filter((l) => l.classic_mode !== 'must_on_end')
+
+  let selected
+  if (mustOnEndPool.length === 0) {
+    const count = Math.min(CLASSIC_LEVEL_COUNT, eligible.length)
+    const shuffled = [...eligible].sort(() => Math.random() - 0.5)
+    selected = shuffled.slice(0, count).sort((a, b) => getNumericDifficulty(a) - getNumericDifficulty(b))
+  } else {
+    const needFirst = CLASSIC_LEVEL_COUNT - 1
+    const otherShuffled = [...otherPool].sort(() => Math.random() - 0.5)
+    const mustShuffled = [...mustOnEndPool].sort(() => Math.random() - 0.5)
+    const fromOther = otherShuffled.slice(0, needFirst)
+    const needFromMust = Math.max(0, needFirst - fromOther.length)
+    const firstSeven = [...fromOther, ...mustShuffled.slice(0, needFromMust)].slice(0, needFirst)
+    const lastLevel = mustOnEndPool[Math.floor(Math.random() * mustOnEndPool.length)]
+    selected = [...firstSeven.sort((a, b) => getNumericDifficulty(a) - getNumericDifficulty(b)), lastLevel]
+  }
+
+  return selected
 }
 
 function formatElapsed(seconds) {
