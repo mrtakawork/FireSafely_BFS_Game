@@ -8,8 +8,8 @@
   "home": {
     "title": "Jeu du point le plus loin",
     "subtitle": "Trouvez la case la plus éloignée de la sortie !",
-    "selectMode": "Choisir le mode",
-    "selectModeHint": "Choisissez un bouton ci-dessous pour commencer",
+    "selectMode": "Classique",
+    "selectModeHint": "Découvrez plusieurs niveaux aléatoires d’un coup",
     "classicMode": "Mode classique",
     "presetMode": "Mode prédéfini",
     "presetLevel": "Niveau prédéfini",

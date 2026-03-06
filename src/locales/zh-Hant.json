@@ -8,8 +8,8 @@
   "home": {
     "title": "最遠點猜測遊戲",
     "subtitle": "找出距離 Exit 最遠的格子！",
-    "selectMode": "選擇遊戲模式",
-    "selectModeHint": "請選擇下方按鈕開始遊戲",
+    "selectMode": "經典",
+    "selectModeHint": "一次體驗多個隨機關卡",
     "classicMode": "經典模式",
     "presetMode": "預設模式",
     "presetLevel": "預設關卡",

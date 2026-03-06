@@ -8,8 +8,8 @@
   "home": {
     "title": "Farthest Point Game",
     "subtitle": "Find the cell farthest from Exit!",
-    "selectMode": "Select game mode",
-    "selectModeHint": "Choose a button below to start",
+    "selectMode": "Classic",
+    "selectModeHint": "Experience multiple random levels at once",
     "classicMode": "Classic Mode",
     "presetMode": "Preset Mode",
     "presetLevel": "Preset Level",
