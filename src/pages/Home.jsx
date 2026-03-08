@@ -13,9 +13,9 @@ function Home() {
   const [showCustomLevels, setShowCustomLevels] = useState(location.state?.showCustomLevels || false)
   const [isSimpleUi, setIsSimpleUi] = useState(() => {
     try {
-      return localStorage.getItem('home_ui_mode') === 'simple'
+      return localStorage.getItem('home_ui_mode_v2') !== 'normal'
     } catch {
-      return false
+      return true
     }
   })
 
@@ -25,7 +25,7 @@ function Home() {
 
   useEffect(() => {
     try {
-      localStorage.setItem('home_ui_mode', isSimpleUi ? 'simple' : 'normal')
+      localStorage.setItem('home_ui_mode_v2', isSimpleUi ? 'simple' : 'normal')
     } catch {
       // ignore
     }
