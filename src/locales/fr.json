@@ -66,7 +66,7 @@
     "restart": "Recommencer",
     "exportLevel": "Exporter JSON",
     "hint": "Indice : {{count}} sortie(s) en {{coords}}. Trouvez la case la plus éloignée ! Les cases noires sont des obstacles (murs).",
-    "wrongAttempt": "Faux !"
+    "wrongAttempt": "Réessayer"
   },
   "gameConfig": {
     "title": "Paramètres du jeu",
