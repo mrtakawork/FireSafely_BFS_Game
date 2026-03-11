@@ -2,7 +2,7 @@
   "name": "Level 4 001",
   "gridSize": 15,
   "difficulty": 4,
-  "timeLimit": 30,
+  "timeLimit": 60,
   "maxAttempts": 5,
   "startPoints": [
     {

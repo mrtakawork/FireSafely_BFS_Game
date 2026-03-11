@@ -2,7 +2,7 @@
   "name": "06_20X_Flat01",
   "gridSize": 20,
   "difficulty": 6,
-  "timeLimit": 30,
+  "timeLimit": 120,
   "maxAttempts": 5,
   "startPoints": [
     {

@@ -2,7 +2,7 @@
   "name": "Level 3 001",
   "gridSize": 10,
   "difficulty": 4,
-  "timeLimit": 30,
+  "timeLimit": 60,
   "maxAttempts": 5,
   "startPoints": [
     {

@@ -2,7 +2,7 @@
   "name": "03-2layerRoom",
   "gridSize": 15,
   "difficulty": 3,
-  "timeLimit": 30,
+  "timeLimit": 60,
   "startPoints": [
     {
       "x": 11,

@@ -2,7 +2,7 @@
   "name": "01-beginner-1",
   "gridSize": 10,
   "difficulty": 1,
-  "timeLimit": 30,
+  "timeLimit": 60,
   "maxAttempts": 5,
   "startPoints": [
     {

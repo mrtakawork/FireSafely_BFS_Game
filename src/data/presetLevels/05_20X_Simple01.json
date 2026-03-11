@@ -2,7 +2,7 @@
   "name": "05_20X_Simple01",
   "gridSize": 21,
   "difficulty": 5,
-  "timeLimit": 30,
+  "timeLimit": 120,
   "maxAttempts": 5,
   "startPoints": [
     {

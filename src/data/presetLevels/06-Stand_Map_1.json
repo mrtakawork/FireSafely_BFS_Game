@@ -2,7 +2,7 @@
   "name": "06-Stand_Map_1",
   "gridSize": 30,
   "difficulty": 6,
-  "timeLimit": 60,
+  "timeLimit": 120,
   "startPoints": [
     {
       "x": 27,

@@ -2,7 +2,7 @@
   "name": "06_25X_Test",
   "gridSize": 26,
   "difficulty": 5,
-  "timeLimit": 30,
+  "timeLimit": 120,
   "maxAttempts": 5,
   "startPoints": [
     {

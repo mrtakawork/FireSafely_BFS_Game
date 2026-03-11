@@ -2,7 +2,7 @@
   "name": "10_HongKongBD",
   "gridSize": 30,
   "difficulty": 10,
-  "timeLimit": 60,
+  "timeLimit": null,
   "maxAttempts": 10,
   "classic_mode": "must_on_end",
   "startPoints": [

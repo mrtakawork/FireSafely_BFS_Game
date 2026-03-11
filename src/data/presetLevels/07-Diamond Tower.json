@@ -2,7 +2,7 @@
   "name": "07-Diamond Tower",
   "gridSize": 30,
   "difficulty": 7,
-  "timeLimit": 60,
+  "timeLimit": 180,
   "maxAttempts": 5,
   "startPoints": [
     {

@@ -2,7 +2,7 @@
   "name": "09_Maze_building",
   "gridSize": 25,
   "difficulty": 9,
-  "timeLimit": 60,
+  "timeLimit": 300,
   "maxAttempts": 5,
   "startPoints": [
     {
